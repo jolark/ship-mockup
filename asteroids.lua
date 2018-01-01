@@ -1,4 +1,4 @@
-local Vector = require 'lib.vector'
+local Vector = require 'lib.hump.vector'
 
 require 'utils'
 
