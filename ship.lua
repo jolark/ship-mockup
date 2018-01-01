@@ -1,4 +1,4 @@
-ship = {}
+local ship = {}
 
 -- libs
 local Bump   = require 'lib.bump'
@@ -13,7 +13,6 @@ require 'asteroids'
 require 'stars'
 require 'blocks'
 require 'lights'
-
 
 -- World creation -- bump.lua stuff
 local world = Bump.newWorld()
@@ -140,3 +139,6 @@ function ship:draw()
 	end)
 	camera:detach()
 end
+
+
+return ship

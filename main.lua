@@ -2,7 +2,8 @@
 local Gamestate = require 'lib.hump.gamestate'
 
 -- modules
-require 'ship'
+local ship = require 'ship'
+
 
 function love.load()
 	-- LÖVE settings stuff
@@ -11,7 +12,7 @@ function love.load()
 	-- love.window.setMode(1440, 900)
 	-- love.window.setMode(1920, 1080)
 	love.window.setFullscreen(true)
-
+	ship:load()
 end
 
 function love.update(dt)
