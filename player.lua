@@ -10,7 +10,7 @@ function Player:new()
 		w=10,
 		h=10,
 		speed = 100,
-		charAnimation = newAnimation(love.graphics.newImage('char.png'), {
+		charAnimation = newAnimation(love.graphics.newImage('img/char.png'), {
 			love.graphics.newQuad(0, 0, 25, 25, 25, 150),
 			love.graphics.newQuad(0, 25, 25, 25, 25, 150),
 			love.graphics.newQuad(0, 50, 25, 25, 25, 150),

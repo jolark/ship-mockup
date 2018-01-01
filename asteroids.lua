@@ -4,10 +4,10 @@ require 'utils'
 
 -- Asteroids
 
-local crashSound1 = love.audio.newSource( '207930__klankbeeld__bang-prison-door-loop-130903-00-1.mp3', 'static' )
-local crashSound2 = love.audio.newSource( '207930__klankbeeld__bang-prison-door-loop-130903-00-2.mp3', 'static' )
-local crashSound3 = love.audio.newSource( '207930__klankbeeld__bang-prison-door-loop-130903-00-3.mp3', 'static' )
-local crashSound4 = love.audio.newSource( '207930__klankbeeld__bang-prison-door-loop-130903-00-4.mp3', 'static' )
+local crashSound1 = love.audio.newSource( 'sound/207930__klankbeeld__bang-prison-door-loop-130903-00-1.mp3', 'static' )
+local crashSound2 = love.audio.newSource( 'sound/207930__klankbeeld__bang-prison-door-loop-130903-00-2.mp3', 'static' )
+local crashSound3 = love.audio.newSource( 'sound/207930__klankbeeld__bang-prison-door-loop-130903-00-3.mp3', 'static' )
+local crashSound4 = love.audio.newSource( 'sound/207930__klankbeeld__bang-prison-door-loop-130903-00-4.mp3', 'static' )
 
 
 local function sign(p1, p2, p3)
