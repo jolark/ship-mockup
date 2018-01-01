@@ -36,9 +36,10 @@ function initBlocks(world)
 	addBlock(world, blocks,  132, 169, 105, 22)
 	addBlock(world, blocks,  132, 416, 105, 22)
 	-- sofa
-	addBlock(world, blocks,  326, 169, 106, 30)
-	addBlock(world, blocks,  326, 198, 30, 30)
-	addBlock(world, blocks,  405, 198, 30, 30)
+	-- addBlock(world, blocks,  326, 169, 106, 30)
+	-- addBlock(world, blocks,  326, 198, 30, 30)
+	-- addBlock(world, blocks,  405, 198, 30, 30)
+	addBlock(world, blocks,  346, 253, 62, 3)
 	-- table
 	addBlock(world, blocks,  264, 168, 30, 80)
 	-- plant

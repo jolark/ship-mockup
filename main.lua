@@ -24,23 +24,14 @@ local stars = {}
 local lights = {}
 local playerShadow
 local tilt = false
+--local doors = {toEngines={260,286}} --, toMain={}, toBedroom={}, toCockpit={}}
 
 
 -- Images
 local shipImage = love.graphics.newImage('img/ship.png')
-local boardAnimation = newAnimation(love.graphics.newImage('img/board-lights.png'), {
-			love.graphics.newQuad(0, 0, 103, 1, 103, 5),
-			love.graphics.newQuad(0, 1, 103, 1, 103, 5),
-			love.graphics.newQuad(0, 2, 103, 1, 103, 5),
-			love.graphics.newQuad(0, 3, 103, 1, 103, 5),
-			love.graphics.newQuad(0, 4, 103, 1, 103, 5)
-		}, 5)
-local tvAnimation = newAnimation(love.graphics.newImage('img/tv.png'), {
-			love.graphics.newQuad(0, 0, 158, 86, 158, 344),
-			love.graphics.newQuad(0, 87, 158, 86, 158, 344),
-			love.graphics.newQuad(0, 173, 158, 86, 158, 344),
-			love.graphics.newQuad(0, 258, 158, 86, 158, 344)
-		})
+local boardAnimation = newAnimation(love.graphics.newImage('img/board-lights.png'), 103, 1, 'down', 5)
+local cockpitAnimation = newAnimation(love.graphics.newImage('img/cockpit.png'), 33, 77, 'right', 3)
+local tvAnimation = {delay=50, rgba={math.random(100,255), math.random(100,255), math.random(100,255), math.random(50,150)}}
 
 -- Sounds
 local engineSound = love.audio.newSource( 'sound/325845__daveshu88__airplane-inside-ambient-cessna-414-condenser.mp3', 'static' )
@@ -64,14 +55,19 @@ local function updateShip(dt, colliding)
 		end
 	end
 
+	-- animations
 	boardAnimation.currentTime = boardAnimation.currentTime + dt
 	if boardAnimation.currentTime >= boardAnimation.duration then
 		boardAnimation.currentTime = boardAnimation.currentTime - boardAnimation.duration
 	end
-	tvAnimation.duration = math.random(5)
-	tvAnimation.currentTime = tvAnimation.currentTime + dt
-	if tvAnimation.currentTime >= tvAnimation.duration then
-		tvAnimation.currentTime = tvAnimation.currentTime - tvAnimation.duration
+	cockpitAnimation.currentTime = cockpitAnimation.currentTime + dt
+	if cockpitAnimation.currentTime >= cockpitAnimation.duration then
+		cockpitAnimation.currentTime = cockpitAnimation.currentTime - cockpitAnimation.duration
+	end
+	tvAnimation.delay = math.max(0, tvAnimation.delay - 1)
+	if tvAnimation.delay == 0 then
+		tvAnimation.rgba = {math.random(200, 255), math.random(200, 255), math.random(200, 255), math.random(50, 100)}
+		tvAnimation.delay = math.random(1, 50)
 	end
 end
 
@@ -79,14 +75,23 @@ local function drawShip()
 	if tilt then
 		love.graphics.draw(shipImage, 2, 2)
 		tilt = false
+		-- lightsOff()
 	else
 		love.graphics.draw(shipImage, 0, 0)
+		-- lightsOn()
 	end
+	-- engine boards animations
 	local spriteNum = math.floor(boardAnimation.currentTime / boardAnimation.duration * #boardAnimation.quads) + 1
 	love.graphics.draw(boardAnimation.spriteSheet, boardAnimation.quads[spriteNum], 135, 417)
 	love.graphics.draw(boardAnimation.spriteSheet, boardAnimation.quads[spriteNum], 132, 189)
-	local spriteNum = math.floor(tvAnimation.currentTime / tvAnimation.duration * #tvAnimation.quads) + 1
-	love.graphics.draw(tvAnimation.spriteSheet, tvAnimation.quads[spriteNum], 298, 167)
+	-- cockpit animation
+	local spriteNum = math.floor(cockpitAnimation.currentTime / cockpitAnimation.duration * #cockpitAnimation.quads) + 1
+	love.graphics.draw(cockpitAnimation.spriteSheet, cockpitAnimation.quads[spriteNum], 582, 217)
+	-- tv animation
+	love.graphics.setColor(tvAnimation.rgba)
+	love.graphics.polygon('fill', 298, 167, 455, 167, 406, 252, 348, 252)
+	
+	love.graphics.setColor(255,255,255)
 end
 
 -- Main LÖVE functions

@@ -1,4 +1,25 @@
-function newAnimation(image, quads, duration)
+function newAnimation(image, quadwidth, quadheight, direction, duration)
+	local quads = {}
+	if direction == 'right' then
+		for i=0,image:getWidth()-quadwidth,quadwidth do
+			table.insert(quads, love.graphics.newQuad(i, 0, quadwidth, quadheight, image:getWidth(), image:getHeight()))
+		end
+	elseif direction == 'down' then
+		for i=0,image:getHeight()-quadheight,quadheight do
+			table.insert(quads, love.graphics.newQuad(0, i, quadwidth, quadheight, image:getWidth(), image:getHeight()))
+		end
+	end
+
+    local animation = {}
+    animation.spriteSheet = image;
+    animation.quads = quads;
+    animation.duration = duration or 1
+    animation.currentTime = 0
+ 	animation.rot = 0
+    return animation
+end
+
+function newAnimationFromQuads(image, quads, duration)
     local animation = {}
     animation.spriteSheet = image;
     animation.quads = quads;
