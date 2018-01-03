@@ -19,6 +19,13 @@ function newAnimation(image, quadwidth, quadheight, direction, duration)
     return animation
 end
 
+function animationUpdate(animation, dt)
+	animation.currentTime = animation.currentTime + dt
+	if animation.currentTime >= animation.duration then
+		animation.currentTime = animation.currentTime - animation.duration
+	end
+end
+
 function newAnimationFromQuads(image, quads, duration)
     local animation = {}
     animation.spriteSheet = image;
