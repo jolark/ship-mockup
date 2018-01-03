@@ -21,7 +21,7 @@ local cols_len = 0 -- how many collisions are happening
 
 local VIEW_SCALE = 2
 
-local player = Player:new()
+
 local asteroids = {}
 local stars = {}
 local lights = {}
@@ -59,14 +59,9 @@ local function updateShip(dt, colliding)
 	end
 
 	-- animations
-	boardAnimation.currentTime = boardAnimation.currentTime + dt
-	if boardAnimation.currentTime >= boardAnimation.duration then
-		boardAnimation.currentTime = boardAnimation.currentTime - boardAnimation.duration
-	end
-	cockpitAnimation.currentTime = cockpitAnimation.currentTime + dt
-	if cockpitAnimation.currentTime >= cockpitAnimation.duration then
-		cockpitAnimation.currentTime = cockpitAnimation.currentTime - cockpitAnimation.duration
-	end
+	animationUpdate(boardAnimation, dt)
+	animationUpdate(cockpitAnimation, dt)
+	-- tv animation update
 	tvAnimation.delay = math.max(0, tvAnimation.delay - 1)
 	if tvAnimation.delay == 0 then
 		tvAnimation.rgba = {math.random(200, 255), math.random(200, 255), math.random(200, 255), math.random(50, 100)}
@@ -88,8 +83,8 @@ local function drawShip()
 	love.graphics.draw(boardAnimation.spriteSheet, boardAnimation.quads[spriteNum], 135, 417)
 	love.graphics.draw(boardAnimation.spriteSheet, boardAnimation.quads[spriteNum], 132, 189)
 	-- cockpit animation
-	local spriteNum = math.floor(cockpitAnimation.currentTime / cockpitAnimation.duration * #cockpitAnimation.quads) + 1
-	love.graphics.draw(cockpitAnimation.spriteSheet, cockpitAnimation.quads[spriteNum], 582, 217)
+	-- local spriteNum = math.floor(cockpitAnimation.currentTime / cockpitAnimation.duration * #cockpitAnimation.quads) + 1
+	-- love.graphics.draw(cockpitAnimation.spriteSheet, cockpitAnimation.quads[spriteNum], 582, 217)
 	-- tv animation
 	love.graphics.setColor(tvAnimation.rgba)
 	love.graphics.polygon('fill', 298, 167, 455, 167, 406, 252, 348, 252)
@@ -110,7 +105,7 @@ function ship_view:load()
 	local blocks = initBlocks(world)
 	-- lights
 	lightWorld = LightWorld({ambient = {55,55,55}})
-	addLights(lightWorld, blocks)
+	addShipLights(lightWorld, blocks)
 	playerShadow = lightWorld:newRectangle(player.x, player.y, 10, 10)
 	-- camera
 	camera = Camera(player.x, player.y)

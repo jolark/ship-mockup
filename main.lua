@@ -2,8 +2,12 @@
 local Gamestate = require 'lib.hump.gamestate'
 
 -- modules
+require 'player'
 local ship_view = require 'ship_view'
 local cockpit_view = require 'cockpit_view'
+
+-- globals
+player = Player:new()
 
 local keypressed = false 
 local state = 'ship'
@@ -26,9 +30,12 @@ end
 
 function love.update(dt)
 	if love.keyboard.isDown('return') and not keypressed then
-		if state == 'ship' then
+		if state == 'ship' and player.canSwitchToCockpit then
 			Gamestate.switch(cockpit_view)
 			state = 'cockpit'
+		--elseif state == 'ship' and player.canSwitchToEngines then
+		--	Gamestate.switch(engines_view)
+		--	state = 'engines'
 		elseif state == 'cockpit' then
 			Gamestate.switch(ship_view)
 			state = 'ship'

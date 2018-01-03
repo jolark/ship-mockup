@@ -3,7 +3,7 @@ local engineroomlight1
 local engineroomlight2
 local cockpitroomlight
 
-function addLights(lightWorld, blocks)
+function addShipLights(lightWorld, blocks)
 	mainroomlight = lightWorld:newLight(312, 324, 155, 130, 0, 1500)
 	mainroomlight:setGlowStrength(0.25)
 	mainroomlight:setSmooth(1.5)
@@ -16,10 +16,10 @@ function addLights(lightWorld, blocks)
 	engineroomlight2:setGlowStrength(0.5)
 	engineroomlight2:setSmooth(1.5)
 
-	cockpitroomlight = lightWorld:newLight(538, 212, 155, 130, 0, 200)
-	cockpitroomlight:setGlowStrength(0.1)
-	cockpitroomlight:setSmooth(2)
-	cockpitroomlight:setDirection(-math.pi * 3 / 2)
+	-- cockpitroomlight = lightWorld:newLight(538, 212, 155, 130, 0, 200)
+	-- cockpitroomlight:setGlowStrength(0.1)
+	-- cockpitroomlight:setSmooth(2)
+	-- cockpitroomlight:setDirection(-math.pi * 3 / 2)
 
 	-- SHADOWS
 	for _,block in ipairs(blocks) do

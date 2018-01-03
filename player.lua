@@ -20,7 +20,13 @@ function Player:new()
 			love.graphics.newQuad(0, 100, 25, 25, 25, 150),
 			love.graphics.newQuad(0, 75, 25, 25, 25, 150),
 			love.graphics.newQuad(0, 0, 25, 25, 25, 150)
-		})
+		}),
+		switchAnimation = newAnimationFromQuads(love.graphics.newImage('img/switch.png'), {
+			love.graphics.newQuad(0, 0, 30, 10, 30, 30),
+			love.graphics.newQuad(0, 10, 30, 10, 30, 30),
+			love.graphics.newQuad(0, 20, 30, 10, 30, 30),
+			love.graphics.newQuad(0, 10, 30, 10, 30, 30),
+		}, 0.75)
 	}
 	setmetatable(player, { __index = Player })
 	return player
@@ -68,10 +74,7 @@ function Player:update(world, cols_len, dt)
 			local col = cols[i]
 			-- print(('col.other = %s, col.type = %s, col.normal = %d,%d'):format(col.other, col.type, col.normal.x, col.normal.y))
 		end
-		self.charAnimation.currentTime = self.charAnimation.currentTime + dt
-		if self.charAnimation.currentTime >= self.charAnimation.duration then
-			self.charAnimation.currentTime = self.charAnimation.currentTime - self.charAnimation.duration
-		end
+		animationUpdate(self.charAnimation, dt)
 	else
 		self.charAnimation.currentTime = 0
 	end
@@ -82,9 +85,25 @@ function Player:update(world, cols_len, dt)
 	-- else
 	-- 	engineSound:setVolume(0.1)
 	-- end
+
+	-- near cockpit
+	local x = player.x - 590 -- cockpit x
+	local y = player.y - 250 -- cockpit y
+	if math.sqrt(x*x + y*y) < 30 then
+		self.canSwitchToCockpit = true
+	else
+		self.canSwitchToCockpit = false
+	end
+	if self.canSwitchToCockpit then
+		animationUpdate(self.switchAnimation, dt)
+	end
 end
 
 function Player:draw()
 	local spriteNum = math.floor(self.charAnimation.currentTime / self.charAnimation.duration * #self.charAnimation.quads) + 1
 	love.graphics.draw(self.charAnimation.spriteSheet, self.charAnimation.quads[spriteNum], self.x, self.y, self.charAnimation.rot, 1, 1, 12, 12)
+	if self.canSwitchToCockpit then
+		local spriteNum = math.floor(self.switchAnimation.currentTime / self.switchAnimation.duration * #self.switchAnimation.quads) + 1
+	love.graphics.draw(self.switchAnimation.spriteSheet, self.switchAnimation.quads[spriteNum], self.x, self.y, 0, 1, 1, 20, 20)
+	end
 end
