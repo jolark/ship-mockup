@@ -14,13 +14,13 @@ function Space.draw()
     love.graphics.setShader()
 end
 
-function Space.update(dt)
+function Space.update(dt, speed)
     myShader:send('iResolution', {
         love.graphics.getWidth(),
         love.graphics.getHeight(),
         0
     })  
-    myShader:send('iTime', love.timer.getTime())
+    myShader:send('iTime', love.timer.getTime() * speed)
     myShader:send('fSpeed', Space.speed)
     myShader:send('fBoost', Space.boost)
 end
