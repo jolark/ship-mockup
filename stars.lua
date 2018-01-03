@@ -25,6 +25,8 @@ function updateStars(stars)
 end
 
 function drawStars(stars)
+	love.graphics.setBackgroundColor(21, 11, 21)
+	love.graphics.clear()
 	for _,star in ipairs(stars) do
 		love.graphics.setColor(255, 255, 255)
 		love.graphics.circle('fill', star.x, star.y, 1)

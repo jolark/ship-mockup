@@ -3,7 +3,7 @@ local engineroomlight1
 local engineroomlight2
 local cockpitroomlight
 
-function addLights(blocks)
+function addLights(lightWorld, blocks)
 	mainroomlight = lightWorld:newLight(312, 324, 155, 130, 0, 1500)
 	mainroomlight:setGlowStrength(0.25)
 	mainroomlight:setSmooth(1.5)

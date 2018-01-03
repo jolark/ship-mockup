@@ -1,4 +1,4 @@
-local ship = {}
+local ship_view = {}
 
 -- libs
 local Bump   = require 'lib.bump'
@@ -16,6 +16,7 @@ require 'lights'
 
 -- World creation -- bump.lua stuff
 local world = Bump.newWorld()
+local lightWorld
 local cols_len = 0 -- how many collisions are happening
 
 local VIEW_SCALE = 2
@@ -98,7 +99,7 @@ end
 
 -- Main LÖVE functions
 
-function ship:load()
+function ship_view:load()
 	-- player
 	world:add(player, player.x, player.y, player.w, player.h)
 	-- ship walls and objects
@@ -109,14 +110,14 @@ function ship:load()
 	local blocks = initBlocks(world)
 	-- lights
 	lightWorld = LightWorld({ambient = {55,55,55}})
-	addLights(blocks)
+	addLights(lightWorld, blocks)
 	playerShadow = lightWorld:newRectangle(player.x, player.y, 10, 10)
 	-- camera
 	camera = Camera(player.x, player.y)
 	camera:zoom(VIEW_SCALE)
 end
 
-function ship:update(dt)
+function ship_view:update(dt)
 	cols_len = 0
 	player:update(world, cols_len, dt)
 	updateStars(stars)
@@ -128,7 +129,7 @@ function ship:update(dt)
 end
 
 
-function ship:draw()
+function ship_view:draw()
 	camera:attach()
 	lightWorld:draw(function()
 		drawStars(stars)
@@ -141,4 +142,4 @@ function ship:draw()
 end
 
 
-return ship
+return ship_view
