@@ -11,7 +11,7 @@ function updateStars(stars)
 	-- randomly show stars from far right
 	local appearing = math.random()
 	if appearing > 0.90 then
-		table.insert(stars, {x=love.graphics.getWidth(), y=math.random(-love.graphics.getHeight(), love.graphics.getHeight())})
+		table.insert(stars, {x=love.graphics.getWidth()*2, y=math.random(-love.graphics.getHeight(), love.graphics.getHeight())})
 	end
 
 	-- moving

@@ -30,9 +30,9 @@ local function pointInRectangle(pt, rect)
 end 
 
 local function onShip(asteroid)
-	local mainPart = { {x=113, y=146}, {x=512, y=146}, {x=113, y=462} }
-	local frontLeft = { {x=512, y=145}, {x=512, y=278}, {x=678, y=278} }
-	local frontRight = { {x=512, y=278}, {x=512, y=462}, {x=678, y=278} }
+	local mainPart = { {x=226, y=292}, {x=1024, y=292}, {x=226, y=924} }
+	local frontLeft = { {x=1024, y=290}, {x=1024, y=556}, {x=1356, y=556} }
+	local frontRight = { {x=1024, y=556}, {x=1024, y=924}, {x=1356, y=556} }
 	return pointInRectangle(asteroid, mainPart) or pointInTriangle(asteroid, frontLeft) or pointInTriangle(asteroid, frontRight)
 end
 
@@ -50,7 +50,7 @@ function updateAsteroids(asteroids)
 		elseif side == 3 then
 			origin = {love.math.random(love.graphics.getWidth()), love.graphics.getHeight()}
 		end
-		local destination = {love.math.random(125, 625), love.math.random(160, 450)}
+		local destination = {love.math.random(250, 1250), love.math.random(320, 900)}
 		local spid = love.math.random(3,10)
 		table.insert(asteroids, {x=origin[1], y=origin[2], xdest=destination[1], ydest=destination[2], speed=spid})
 	end

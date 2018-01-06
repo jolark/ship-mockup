@@ -5,11 +5,11 @@ Player = {}
 -- Player functions
 function Player:new()
 	local player = { 
-		x=550,
-		y=250,
+		x=850,
+		y=450,
 		w=10,
 		h=10,
-		speed = 100,
+		speed = 250,
 		charAnimation = newAnimationFromQuads(love.graphics.newImage('img/char.png'), {
 			love.graphics.newQuad(0, 0, 25, 25, 25, 150),
 			love.graphics.newQuad(0, 25, 25, 25, 25, 150),
@@ -87,13 +87,13 @@ function Player:update(world, cols_len, dt)
 	-- end
 
 	-- near cockpit
-	local x = player.x - 590 -- cockpit x
-	local y = player.y - 250 -- cockpit y
-	if math.sqrt(x*x + y*y) < 30 then
+	-- local x = player.x - 1150 -- cockpit x
+	-- local y = player.y - 500 -- cockpit y
+	-- if math.sqrt(x*x + y*y) < 30 then
 		self.canSwitchToCockpit = true
-	else
-		self.canSwitchToCockpit = false
-	end
+	-- else
+	-- 	self.canSwitchToCockpit = false
+	-- end
 	if self.canSwitchToCockpit then
 		animationUpdate(self.switchAnimation, dt)
 	end
@@ -101,9 +101,9 @@ end
 
 function Player:draw()
 	local spriteNum = math.floor(self.charAnimation.currentTime / self.charAnimation.duration * #self.charAnimation.quads) + 1
-	love.graphics.draw(self.charAnimation.spriteSheet, self.charAnimation.quads[spriteNum], self.x, self.y, self.charAnimation.rot, 1, 1, 12, 12)
+	love.graphics.draw(self.charAnimation.spriteSheet, self.charAnimation.quads[spriteNum], self.x, self.y, self.charAnimation.rot, 2, 2, 12, 12)
 	if self.canSwitchToCockpit then
 		local spriteNum = math.floor(self.switchAnimation.currentTime / self.switchAnimation.duration * #self.switchAnimation.quads) + 1
-	love.graphics.draw(self.switchAnimation.spriteSheet, self.switchAnimation.quads[spriteNum], self.x, self.y, 0, 1, 1, 20, 20)
+	love.graphics.draw(self.switchAnimation.spriteSheet, self.switchAnimation.quads[spriteNum], self.x, self.y, 0, 2, 2, 20, 20)
 	end
 end

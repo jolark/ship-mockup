@@ -16,37 +16,37 @@ end
 function initBlocks(world)
 	local blocks = {}
 	-- walls
-	addBlock(world, blocks,  125, 160, 390, 6)
-	addBlock(world, blocks,  125, 160, 6, 287)
-	addBlock(world, blocks,  258, 160, 6, 100)
-	addBlock(world, blocks,  258, 315, 6, 132)
-	addBlock(world, blocks,  124, 442, 389, 6)
-	addBlock(world, blocks,  507, 161, 6, 61)
-	addBlock(world, blocks,  507, 289, 6, 157)
-	addBlock(world, blocks,  513, 202, 45, 6)
-	addBlock(world, blocks,  620, 202, 6, 105)
-	addBlock(world, blocks,  507, 302, 121, 6)
-	addBlock(world, blocks,  258, 328, 106, 6)
-	addBlock(world, blocks,  426, 328, 81, 6)
-	addBlock(world, blocks,  130, 230, 85, 144)
+	addBlock(world, blocks,  250, 320, 780, 12)
+	addBlock(world, blocks,  250, 320, 12, 574)
+	addBlock(world, blocks,  516, 320, 12, 200)
+	addBlock(world, blocks,  516, 630, 12, 264)
+	addBlock(world, blocks,  248, 884, 778, 12)
+	addBlock(world, blocks,  1014, 322, 12, 122)
+	addBlock(world, blocks,  1014, 578, 12, 314)
+	addBlock(world, blocks,  1026, 404, 232, 12)
+	addBlock(world, blocks,  1240, 404, 12, 210)
+	addBlock(world, blocks,  1014, 604, 242, 12)
+	addBlock(world, blocks,  516, 656, 212, 12)
+	addBlock(world, blocks,  852, 656, 162, 12)
+	addBlock(world, blocks,  260, 460, 170, 288)
 	-- cockpit chair
-	addBlock(world, blocks,  560, 251, 26, 20)
+	addBlock(world, blocks,  1120, 502, 52, 40)
 	-- bed
-	addBlock(world, blocks,  400, 363, 104, 75)
-	addBlock(world, blocks,  477, 336, 30, 30)
+	addBlock(world, blocks,  800, 726, 208, 150)
+	addBlock(world, blocks,  954, 672, 60, 60)
 	-- engine boards
-	addBlock(world, blocks,  132, 169, 105, 22)
-	addBlock(world, blocks,  132, 416, 105, 22)
+	addBlock(world, blocks,  264, 338, 210, 44)
+	addBlock(world, blocks,  264, 832, 210, 44)
 	-- sofa
-	-- addBlock(world, blocks,  326, 169, 106, 30)
-	-- addBlock(world, blocks,  326, 198, 30, 30)
-	-- addBlock(world, blocks,  405, 198, 30, 30)
-	addBlock(world, blocks,  346, 253, 62, 3)
+	-- addBlock(world, blocks,  652, 338, 212, 60)
+	-- addBlock(world, blocks,  652, 396, 60, 60)
+	-- addBlock(world, blocks,  810, 396, 60, 60)
+	addBlock(world, blocks,  692, 506, 124, 6)
 	-- table
-	addBlock(world, blocks,  264, 168, 30, 80)
+	addBlock(world, blocks,  528, 336, 60, 160)
 	-- plant
-	addBlock(world, blocks,  480, 302, 16, 16)
+	addBlock(world, blocks,  960, 604, 32, 32)
 	-- cockpit
-	addBlock(world, blocks,  582, 210, 40, 90)
+	addBlock(world, blocks,  1164, 420, 80, 180)
 	return blocks
 end

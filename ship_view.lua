@@ -19,7 +19,7 @@ local world = Bump.newWorld()
 local lightWorld
 local cols_len = 0 -- how many collisions are happening
 
-local VIEW_SCALE = 2
+local VIEW_SCALE = 1
 
 
 local asteroids = {}
@@ -71,23 +71,24 @@ end
 
 local function drawShip()
 	if tilt then
-		love.graphics.draw(shipImage, 2, 2)
+		love.graphics.draw(shipImage, 2, 2, 0, 2)
 		tilt = false
 		-- lightsOff()
 	else
-		love.graphics.draw(shipImage, 0, 0)
+		love.graphics.draw(shipImage, 0, 0, 0, 2)
 		-- lightsOn()
 	end
 	-- engine boards animations
 	local spriteNum = math.floor(boardAnimation.currentTime / boardAnimation.duration * #boardAnimation.quads) + 1
-	love.graphics.draw(boardAnimation.spriteSheet, boardAnimation.quads[spriteNum], 135, 417)
-	love.graphics.draw(boardAnimation.spriteSheet, boardAnimation.quads[spriteNum], 132, 189)
+	love.graphics.draw(boardAnimation.spriteSheet, boardAnimation.quads[spriteNum], 270, 834, 0, 2)
+	love.graphics.draw(boardAnimation.spriteSheet, boardAnimation.quads[spriteNum], 264, 378, 0, 2)
 	-- cockpit animation
 	-- local spriteNum = math.floor(cockpitAnimation.currentTime / cockpitAnimation.duration * #cockpitAnimation.quads) + 1
 	-- love.graphics.draw(cockpitAnimation.spriteSheet, cockpitAnimation.quads[spriteNum], 582, 217)
 	-- tv animation
 	love.graphics.setColor(tvAnimation.rgba)
-	love.graphics.polygon('fill', 298, 167, 455, 167, 406, 252, 348, 252)
+	-- love.graphics.polygon('fill', 298, 167, 455, 167, 406, 252, 348, 252)
+	love.graphics.polygon('fill', 596, 334, 910, 334, 812, 504, 696, 504)
 	
 	love.graphics.setColor(255,255,255)
 end
