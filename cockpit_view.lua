@@ -111,6 +111,8 @@ function cockpit_view:draw()
 	-- text
 	love.graphics.setColor(0,200,0)
 	love.graphics.draw(scrollingText, math.max(440, 676 - scrollingTextOffset * 7), 495)
+	love.graphics.setColor(0,200,0, 30)
+	love.graphics.draw(scrollingText, math.max(440, 676 - scrollingTextOffset * 7), 295, 0, 1, -1)
 	-- reset colors
 	love.graphics.setColor(255,255,255)
 end

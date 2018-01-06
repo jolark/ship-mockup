@@ -87,13 +87,13 @@ function Player:update(world, cols_len, dt)
 	-- end
 
 	-- near cockpit
-	-- local x = player.x - 1150 -- cockpit x
-	-- local y = player.y - 500 -- cockpit y
-	-- if math.sqrt(x*x + y*y) < 30 then
+	local x = player.x - 1150 -- cockpit x
+	local y = player.y - 500 -- cockpit y
+	if math.sqrt(x*x + y*y) < 30 then
 		self.canSwitchToCockpit = true
-	-- else
-	-- 	self.canSwitchToCockpit = false
-	-- end
+	else
+		self.canSwitchToCockpit = false
+	end
 	if self.canSwitchToCockpit then
 		animationUpdate(self.switchAnimation, dt)
 	end
