@@ -128,6 +128,11 @@ function ship_view:update(dt)
 	updateShip(dt, colliding)
 	updateCamera()
 	lightWorld:update(dt)
+	if ship_view.engineBreak then
+		lightsOn({'engine1', 'engine2'})
+	else
+		lightsOff({'engine1', 'engine2'})
+	end
 	playSounds()
 end
 

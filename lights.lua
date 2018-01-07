@@ -27,16 +27,30 @@ function addShipLights(lightWorld, blocks)
 	end
 end
 
-function lightsOn()
-	mainroomlight:setVisible(true)
-	engineroomlight1:setVisible(true)
-	engineroomlight2:setVisible(true)
-	cockpitroomlight:setVisible(true)
+function lightsOn(rooms)
+	for _,room in ipairs(rooms) do
+		if room == 'main' then
+			mainroomlight:setVisible(true)
+		elseif room == 'engine1' then
+			engineroomlight1:setVisible(true)
+		elseif room == 'engine2' then
+			engineroomlight2:setVisible(true)
+		elseif room == 'cockpit' then
+			cockpitroomlight:setVisible(true)
+		end
+	end
 end
 
-function lightsOff()
-	mainroomlight:setVisible(false)
-	engineroomlight1:setVisible(false)
-	engineroomlight2:setVisible(false)
-	cockpitroomlight:setVisible(false)
+function lightsOff(rooms)
+	for _,room in ipairs(rooms) do
+		if room == 'main' then
+			mainroomlight:setVisible(false)
+		elseif room == 'engine1' then
+			engineroomlight1:setVisible(false)
+		elseif room == 'engine2' then
+			engineroomlight2:setVisible(false)
+		elseif room == 'cockpit' then
+			cockpitroomlight:setVisible(false)
+		end
+	end
 end

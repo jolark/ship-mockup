@@ -78,19 +78,34 @@ local function drawTube(tube)
 	end
 end
 
+local function shuffleTubes()
+	for _,tube in ipairs(tubes) do
+		tube.direction = choose(directions)
+	end
+end
 
+local function initialDirection(index)
+	if index % 2 == 0 then
+		return 'up'
+	else
+		return 'down'
+	end
+end
 
 ---- LÖVE functions
 
-function engines_view:enter(previous, tilt)
-	print(tilt)
+function engines_view:enter(previous, engineBreak)
+	engines_view.engineBreak = engineBreak
+	if engineBreak then
+		shuffleTubes()
+	end
 end
 
 
 function engines_view:load()
 	for i=1,5 do -- tube columns
 		for j=1,4 do -- tube rows
-			table.insert(tubes, {x=i, y=j, direction=choose(directions)})
+			table.insert(tubes, {x=i, y=j, direction=initialDirection(j)})
 		end
 	end
 end
@@ -118,9 +133,16 @@ function engines_view:update(dt)
 	end
 
 	-- are engines ok ?
+	local allOK = true
 	for i=1,4 do -- ugly access to last column
 		enginesOk[i] = tubes[i + 16].direction ~= 'left' and isConnected(tubes[i + 16], {})
+		if not enginesOk[i] then
+			allOK = false
+		end
 	end
+
+	engines_view.engineBreak = not allOK
+
 end
 
 
