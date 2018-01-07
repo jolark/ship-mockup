@@ -26,7 +26,9 @@ function Player:new()
 			love.graphics.newQuad(0, 10, 30, 10, 30, 30),
 			love.graphics.newQuad(0, 20, 30, 10, 30, 30),
 			love.graphics.newQuad(0, 10, 30, 10, 30, 30),
-		}, 0.75)
+		}, 0.75),
+		canSwitchToCockpit = false,
+		canSwitchToEngines = false
 	}
 	setmetatable(player, { __index = Player })
 	return player
@@ -80,11 +82,18 @@ function Player:update(world, cols_len, dt)
 	end
 
 	-- near engines
-	-- if self.x < 250 then
-	-- 	engineSound:setVolume(0.2)
+	-- local x1 = player.x - 380 -- right engine x 
+	-- local y1 = player.y - 820 -- right engine y
+	-- local x2 = player.x - 380 -- left engine x 
+	-- local y2 = player.y - 400 -- left engine y
+	-- if math.sqrt(x1*x1 + y1*y1) < 50 or math.sqrt(x2*x2 + y2*y2) < 50 then
+		self.canSwitchToEngines = true
 	-- else
-	-- 	engineSound:setVolume(0.1)
+	-- 	self.canSwitchToEngines = false
 	-- end
+	if self.canSwitchToEngines then
+		animationUpdate(self.switchAnimation, dt)
+	end
 
 	-- near cockpit
 	local x = player.x - 1150 -- cockpit x
@@ -102,7 +111,8 @@ end
 function Player:draw()
 	local spriteNum = math.floor(self.charAnimation.currentTime / self.charAnimation.duration * #self.charAnimation.quads) + 1
 	love.graphics.draw(self.charAnimation.spriteSheet, self.charAnimation.quads[spriteNum], self.x, self.y, self.charAnimation.rot, 2, 2, 12, 12)
-	if self.canSwitchToCockpit then
+	
+	if self.canSwitchToCockpit or self.canSwitchToEngines then
 		local spriteNum = math.floor(self.switchAnimation.currentTime / self.switchAnimation.duration * #self.switchAnimation.quads) + 1
 	love.graphics.draw(self.switchAnimation.spriteSheet, self.switchAnimation.quads[spriteNum], self.x, self.y, 0, 2, 2, 20, 20)
 	end

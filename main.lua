@@ -5,6 +5,7 @@ local Gamestate = require 'lib.hump.gamestate'
 require 'player'
 local ship_view = require 'ship_view'
 local cockpit_view = require 'cockpit_view'
+local engines_view = require 'engines_view'
 
 -- globals
 player = Player:new()
@@ -23,6 +24,7 @@ function love.load()
 	-- load states
 	ship_view:load()
 	cockpit_view:load()
+	engines_view:load()
 
 	Gamestate.registerEvents()
     Gamestate.switch(ship_view)
@@ -33,10 +35,10 @@ function love.update(dt)
 		if state == 'ship' and player.canSwitchToCockpit then
 			Gamestate.switch(cockpit_view)
 			state = 'cockpit'
-		--elseif state == 'ship' and player.canSwitchToEngines then
-		--	Gamestate.switch(engines_view)
-		--	state = 'engines'
-		elseif state == 'cockpit' then
+		elseif state == 'ship' and player.canSwitchToEngines then
+			Gamestate.switch(engines_view)
+			state = 'engines'
+		elseif state == 'cockpit' or state == 'engines' then
 			Gamestate.switch(ship_view)
 			state = 'ship'
 		end

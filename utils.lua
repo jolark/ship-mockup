@@ -61,3 +61,13 @@ function drawBox(box, r,g,b)
 	love.graphics.setColor(r,g,b)
 	love.graphics.rectangle('line', box.x, box.y, box.w, box.h)
 end
+
+function inTable(tab, val)
+    for index, value in ipairs(tab) do
+        if value == val then
+            return true
+        end
+    end
+
+    return false
+end
