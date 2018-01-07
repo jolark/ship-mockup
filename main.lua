@@ -27,19 +27,19 @@ function love.load()
 	engines_view:load()
 
 	Gamestate.registerEvents()
-    Gamestate.switch(ship_view)
+    Gamestate.switch(ship_view, false, 1)
 end
 
 function love.update(dt)
 	if love.keyboard.isDown('return') and not keypressed then
 		if state == 'ship' and player.canSwitchToCockpit then
-			Gamestate.switch(cockpit_view)
+			Gamestate.switch(cockpit_view, ship_view.speed)
 			state = 'cockpit'
 		elseif state == 'ship' and player.canSwitchToEngines then
-			Gamestate.switch(engines_view)
+			Gamestate.switch(engines_view, ship_view.engineBreak)
 			state = 'engines'
 		elseif state == 'cockpit' or state == 'engines' then
-			Gamestate.switch(ship_view)
+			Gamestate.switch(ship_view, engines_view.engineBreak, cockpit_view.speed)
 			state = 'ship'
 		end
 		keypressed = true

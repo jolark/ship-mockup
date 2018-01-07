@@ -1,17 +1,15 @@
 -- Stars
-local shipSpeed = 3
-
 function initStars(stars)
 	for _ = 1,100 do
-		table.insert(stars, {x=math.random(love.graphics.getWidth()*2), y=math.random(-love.graphics.getHeight(), love.graphics.getHeight())})
+		table.insert(stars, {x=math.random(love.graphics.getWidth()*2), y=math.random(0, love.graphics.getHeight()*2)})
 	end
 end
 
-function updateStars(stars)
+function updateStars(stars, speed)
 	-- randomly show stars from far right
 	local appearing = math.random()
 	if appearing > 0.90 then
-		table.insert(stars, {x=love.graphics.getWidth()*2, y=math.random(-love.graphics.getHeight(), love.graphics.getHeight())})
+		table.insert(stars, {x=love.graphics.getWidth()*2, y=math.random(0, love.graphics.getHeight()*2)})
 	end
 
 	-- moving
@@ -19,7 +17,7 @@ function updateStars(stars)
 		if star.x == -love.graphics.getWidth() then
 			table.remove(stars, i)
 		else
-			star.x = star.x - shipSpeed
+			star.x = star.x - speed
 		end
 	end
 end
@@ -29,6 +27,6 @@ function drawStars(stars)
 	love.graphics.clear()
 	for _,star in ipairs(stars) do
 		love.graphics.setColor(255, 255, 255)
-		love.graphics.circle('fill', star.x, star.y, 1)
+		love.graphics.circle('fill', star.x, star.y, 2)
 	end
 end

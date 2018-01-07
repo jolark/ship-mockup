@@ -89,6 +89,6 @@ end
 
 function drawAsteroids(asteroids)
 	for _,asteroid in ipairs(asteroids) do
-		love.graphics.rectangle('fill', asteroid.x, asteroid.y, 5, 5)
+		love.graphics.rectangle('fill', asteroid.x, asteroid.y, 10, 10)
 	end
 end

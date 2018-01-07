@@ -82,6 +82,10 @@ end
 
 ---- LÖVE functions
 
+function engines_view:enter(previous, tilt)
+	print(tilt)
+end
+
 
 function engines_view:load()
 	for i=1,5 do -- tube columns
@@ -115,7 +119,7 @@ function engines_view:update(dt)
 
 	-- are engines ok ?
 	for i=1,4 do -- ugly access to last column
-		enginesOk[i] = tubes[i + 16].direction ~= 'left' isConnected(tubes[i + 16], {})
+		enginesOk[i] = tubes[i + 16].direction ~= 'left' and isConnected(tubes[i + 16], {})
 	end
 end
 
@@ -129,19 +133,19 @@ function engines_view:draw()
 	-- engines leds
 	love.graphics.setColor(0,200,0)
 	if enginesOk[1] then
-		love.graphics.rectangle('fill', 1074, 228, 26, 14)
+		love.graphics.rectangle('fill', 1075, 228, 26, 14)
 		love.graphics.rectangle('fill', 1178, 232, 188, 4)
 	end
 	if enginesOk[2] then
-		love.graphics.rectangle('fill', 1074, 328, 26, 14)
+		love.graphics.rectangle('fill', 1075, 328, 26, 14)
 		love.graphics.rectangle('fill', 1178, 334, 188, 4)
 	end
 	if enginesOk[3] then
-		love.graphics.rectangle('fill', 1074, 428, 26, 14)
+		love.graphics.rectangle('fill', 1075, 428, 26, 14)
 		love.graphics.rectangle('fill', 1178, 436, 188, 4)
 	end
 	if enginesOk[4] then
-		love.graphics.rectangle('fill', 1074, 528, 26, 14)
+		love.graphics.rectangle('fill', 1075, 528, 26, 14)
 		love.graphics.rectangle('fill', 1178, 534, 188, 4)
 	end
 	-- leds

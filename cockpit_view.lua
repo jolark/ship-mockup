@@ -1,4 +1,4 @@
-local cockpit_view = {}
+local cockpit_view = { speed = 1 }
 
 
 -- libs
@@ -6,11 +6,10 @@ local Gamestate = require 'lib.hump.gamestate'
 
 -- modules
 local space = require 'space'
-local LightWorld = require 'lib.light'
 
 require 'utils'
 
-local speed = 1
+local keypressed = false
 
 local image = love.graphics.newImage('img/cockpit-view.png')
 local imageShift = love.graphics.newImage('img/speed-shift.png')
@@ -39,24 +38,35 @@ local leds = {
 	{ color={200,0,0}, position={240, 582}, size={8, 3}, mirror={-136, -286}, delay=1 }
 }
 
-local lightWorld
-local keypressed = false
+
+
+
+-- draw led with fixed size
+local function drawLed(led)
+	love.graphics.setColor(led.color)
+	love.graphics.polygon('fill', led.position[1], led.position[2], led.position[1] + led.size[1], led.position[2] - led.size[2], led.position[1] + led.size[1], led.position[2], led.position[1], led.position[2] + led.size[2])
+	love.graphics.setColor(led.color[1], led.color[2], led.color[3], 30)
+	love.graphics.polygon('fill', led.position[1] + led.mirror[1], led.position[2] + led.mirror[2], led.position[1] + led.size[1] + led.mirror[1], led.position[2] - led.size[2] + led.mirror[2], led.position[1] + led.size[1] + led.mirror[1], led.position[2] + led.mirror[2], led.position[1] + led.mirror[1], led.position[2] + led.size[2] + led.mirror[2])
+end
+
+
+
+
+-- LÖVE functions
 
 function cockpit_view:load()
 	space.load()
-	lightWorld = LightWorld({ambient = {55,55,55}})
 	love.graphics.setFont(font)
 	scrollingText = love.graphics.newText(font, '')
 end
 
 function cockpit_view:update(dt)
-	space.update(dt, speed)
-	lightWorld:update(dt)
+	space.update(dt, cockpit_view.speed)
 	if love.keyboard.isDown('up') and not keypressed then
-		speed = math.min(8, speed + 1)
+		cockpit_view.speed = math.min(8, cockpit_view.speed + 1)
 		keypressed = true
 	elseif love.keyboard.isDown('down') and not keypressed then
-		speed = math.max(0.1, speed - 1)
+		cockpit_view.speed = math.max(0.1, cockpit_view.speed - 1)
 		keypressed = true
 	end
 	if not love.keyboard.isDown('up') and not love.keyboard.isDown('down') then
@@ -80,25 +90,17 @@ function cockpit_view:update(dt)
 	end
 end
 
--- draw led with fixed size
-local function drawLed(led)
-	love.graphics.setColor(led.color)
-	love.graphics.polygon('fill', led.position[1], led.position[2], led.position[1] + led.size[1], led.position[2] - led.size[2], led.position[1] + led.size[1], led.position[2], led.position[1], led.position[2] + led.size[2])
-	love.graphics.setColor(led.color[1], led.color[2], led.color[3], 30)
-	love.graphics.polygon('fill', led.position[1] + led.mirror[1], led.position[2] + led.mirror[2], led.position[1] + led.size[1] + led.mirror[1], led.position[2] - led.size[2] + led.mirror[2], led.position[1] + led.size[1] + led.mirror[1], led.position[2] + led.mirror[2], led.position[1] + led.mirror[1], led.position[2] + led.size[2] + led.mirror[2])
-end
-
 function cockpit_view:draw()
 	-- space outside
 	space.draw()
 	-- cockpit
 	love.graphics.draw(image, 0, 0, 0, 2)
-	love.graphics.draw(imageShift, 818, 490 - speed * 10, 0, 2)
+	love.graphics.draw(imageShift, 818, 490 - cockpit_view.speed * 10, 0, 2)
 	love.graphics.setColor(255,255,255, 30)
-	love.graphics.draw(imageShift, 818, 290 + speed * 10, 0, 2, -math.pi / 2)
+	love.graphics.draw(imageShift, 818, 290 + cockpit_view.speed * 10, 0, 2, -math.pi / 2)
 	love.graphics.setColor(255,255,255)
 	-- leds
-	for i=1,math.ceil(speed) do
+	for i=1,math.ceil(cockpit_view.speed) do
 		love.graphics.setColor(0,200,0)
 		love.graphics.rectangle('fill', 802, 538 - i*12, 5, 2)
 		love.graphics.setColor(0,200,0, 30)

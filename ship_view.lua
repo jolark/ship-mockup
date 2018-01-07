@@ -1,4 +1,4 @@
-local ship_view = {}
+local ship_view = { engineBreak = false, speed = 1 }
 
 -- libs
 local Bump   = require 'lib.bump'
@@ -27,8 +27,6 @@ local stars = {}
 local lights = {}
 local playerShadow
 local tilt = false
---local doors = {toEngines={260,286}} --, toMain={}, toBedroom={}, toCockpit={}}
-
 
 -- Images
 local shipImage = love.graphics.newImage('img/ship.png')
@@ -55,6 +53,9 @@ local function updateShip(dt, colliding)
 	if #colliding > 0 then
 		if math.random() > 0.90 then
 			tilt = true
+			if math.random() > 0.70 then
+				ship_view.engineBreak = true
+			end
 		end
 	end
 
@@ -73,27 +74,33 @@ local function drawShip()
 	if tilt then
 		love.graphics.draw(shipImage, 2, 2, 0, 2)
 		tilt = false
-		-- lightsOff()
 	else
 		love.graphics.draw(shipImage, 0, 0, 0, 2)
-		-- lightsOn()
 	end
 	-- engine boards animations
 	local spriteNum = math.floor(boardAnimation.currentTime / boardAnimation.duration * #boardAnimation.quads) + 1
 	love.graphics.draw(boardAnimation.spriteSheet, boardAnimation.quads[spriteNum], 270, 834, 0, 2)
 	love.graphics.draw(boardAnimation.spriteSheet, boardAnimation.quads[spriteNum], 264, 378, 0, 2)
-	-- cockpit animation
-	-- local spriteNum = math.floor(cockpitAnimation.currentTime / cockpitAnimation.duration * #cockpitAnimation.quads) + 1
-	-- love.graphics.draw(cockpitAnimation.spriteSheet, cockpitAnimation.quads[spriteNum], 582, 217)
 	-- tv animation
 	love.graphics.setColor(tvAnimation.rgba)
-	-- love.graphics.polygon('fill', 298, 167, 455, 167, 406, 252, 348, 252)
 	love.graphics.polygon('fill', 596, 334, 910, 334, 812, 504, 696, 504)
 	
 	love.graphics.setColor(255,255,255)
 end
 
+
+
+
+
+
+
+
 -- Main LÖVE functions
+
+function ship_view:enter(previous, engineBreak, speed)
+	ship_view.engineBreak = engineBreak
+	ship_view.speed = speed
+end
 
 function ship_view:load()
 	-- player
@@ -116,7 +123,7 @@ end
 function ship_view:update(dt)
 	cols_len = 0
 	player:update(world, cols_len, dt)
-	updateStars(stars)
+	updateStars(stars, ship_view.speed)
 	local colliding = updateAsteroids(asteroids)
 	updateShip(dt, colliding)
 	updateCamera()
