@@ -9,7 +9,6 @@ require 'utils'
 local image = love.graphics.newImage('img/engines-view.png')
 local imageTube = love.graphics.newImage('img/tube.png')
 local imageTubeFull = love.graphics.newImage('img/tube-full.png')
-local imageRedLight = love.graphics.newImage('img/red-engines-light.png')
 
 local directions = {'up', 'right', 'down', 'left' }
 
@@ -116,7 +115,7 @@ function engines_view:update(dt)
 
 	-- are engines ok ?
 	for i=1,4 do -- ugly access to last column
-		enginesOk[i] = isConnected(tubes[i + 16], {})
+		enginesOk[i] = tubes[i + 16].direction ~= 'left' isConnected(tubes[i + 16], {})
 	end
 end
 
@@ -152,8 +151,6 @@ function engines_view:draw()
 	love.graphics.rectangle('fill', 567 + (selected.x - 1) * 100, 191 + (selected.y - 1) * 100, 90, 90)
 	-- reset colors
 	love.graphics.setColor(255,255,255)
-	-- red light
-	love.graphics.draw(imageRedLight, 0, 0, 0, 2)
 end
 
 return engines_view

@@ -82,15 +82,15 @@ function Player:update(world, cols_len, dt)
 	end
 
 	-- near engines
-	-- local x1 = player.x - 380 -- right engine x 
-	-- local y1 = player.y - 820 -- right engine y
-	-- local x2 = player.x - 380 -- left engine x 
-	-- local y2 = player.y - 400 -- left engine y
-	-- if math.sqrt(x1*x1 + y1*y1) < 50 or math.sqrt(x2*x2 + y2*y2) < 50 then
+	local x1 = player.x - 380 -- right engine x 
+	local y1 = player.y - 820 -- right engine y
+	local x2 = player.x - 380 -- left engine x 
+	local y2 = player.y - 400 -- left engine y
+	if math.sqrt(x1*x1 + y1*y1) < 50 or math.sqrt(x2*x2 + y2*y2) < 50 then
 		self.canSwitchToEngines = true
-	-- else
-	-- 	self.canSwitchToEngines = false
-	-- end
+	else
+		self.canSwitchToEngines = false
+	end
 	if self.canSwitchToEngines then
 		animationUpdate(self.switchAnimation, dt)
 	end
