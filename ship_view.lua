@@ -53,7 +53,7 @@ local function updateShip(dt, colliding)
 	if #colliding > 0 then
 		if math.random() > 0.90 then
 			tilt = true
-			if math.random() > 0.70 then
+			if math.random() > 0.90 then
 				ship_view.engineBreak = true
 			end
 		end
@@ -124,7 +124,7 @@ function ship_view:update(dt)
 	cols_len = 0
 	player:update(world, cols_len, dt)
 	updateStars(stars, ship_view.speed)
-	local colliding = updateAsteroids(asteroids)
+	local colliding = updateAsteroids(asteroids, ship_view.speed)
 	updateShip(dt, colliding)
 	updateCamera()
 	lightWorld:update(dt)

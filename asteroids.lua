@@ -36,15 +36,15 @@ local function onShip(asteroid)
 	return pointInRectangle(asteroid, mainPart) or pointInTriangle(asteroid, frontLeft) or pointInTriangle(asteroid, frontRight)
 end
 
-function updateAsteroids(asteroids)
+function updateAsteroids(asteroids, speed)
 	-- randomly create a falling asteroid
-	local fall = love.math.random()
-	if fall > 0.98 then
+	local fall = math.random()
+	if fall > 1 - 0.005 * speed then
 		-- asteroid can come from up, down or right
 		local side = love.math.random(3)
 		local origin = {}
 		if side == 1 then
-			origin = {love.graphics.getWidth(), love.math.random(love.graphics.getHeight())}
+			origin = {love.graphics.getWidth()*2, love.math.random(love.graphics.getHeight())}
 		elseif side == 2 then
 			origin = {love.math.random(love.graphics.getWidth()), 0}
 		elseif side == 3 then
