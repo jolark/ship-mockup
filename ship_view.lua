@@ -1,4 +1,4 @@
-local ship_view = { engineBreak = false, speed = 1 }
+local ship_view = { engineBreak = {false, false}, speed = 1 }
 
 -- libs
 local Bump   = require 'lib.bump'
@@ -54,7 +54,10 @@ local function updateShip(dt, colliding)
 		if math.random() > 0.90 then
 			tilt = true
 			if math.random() > 0.90 then
-				ship_view.engineBreak = true
+				ship_view.engineBreak[1] = true
+			end
+			if math.random() > 0.90 then
+				ship_view.engineBreak[2] = true
 			end
 		end
 	end
@@ -70,6 +73,19 @@ local function updateShip(dt, colliding)
 	end
 end
 
+local function updateEngines()
+	if ship_view.engineBreak[1] then
+		lightsOn({'engine1'})
+	else
+		lightsOff({'engine1'})
+	end
+	if ship_view.engineBreak[2] then
+		lightsOn({'engine2'})
+	else
+		lightsOff({'engine2'})
+	end
+end
+
 local function drawShip()
 	if tilt then
 		love.graphics.draw(shipImage, 2, 2, 0, 2)
@@ -78,18 +94,33 @@ local function drawShip()
 		love.graphics.draw(shipImage, 0, 0, 0, 2)
 	end
 	-- engine boards animations
-	local spriteNum = math.floor(boardAnimation.currentTime / boardAnimation.duration * #boardAnimation.quads) + 1
-	love.graphics.draw(boardAnimation.spriteSheet, boardAnimation.quads[spriteNum], 270, 834, 0, 2)
-	love.graphics.draw(boardAnimation.spriteSheet, boardAnimation.quads[spriteNum], 264, 378, 0, 2)
+	-- local spriteNum = math.floor(boardAnimation.currentTime / boardAnimation.duration * #boardAnimation.quads) + 1
+	-- love.graphics.draw(boardAnimation.spriteSheet, boardAnimation.quads[spriteNum], 270, 834, 0, 2)
+	-- love.graphics.draw(boardAnimation.spriteSheet, boardAnimation.quads[spriteNum], 264, 378, 0, 2)
 	-- tv animation
 	love.graphics.setColor(tvAnimation.rgba)
 	love.graphics.polygon('fill', 596, 334, 910, 334, 812, 504, 696, 504)
-	
+
 	love.graphics.setColor(255,255,255)
 end
 
 
-
+local function drawEngines()
+	-- engine right
+	if not ship_view.engineBreak[1] then
+		love.graphics.setColor(0, 255, 0)
+		love.graphics.rectangle('fill', 278, 844, 40, 2)
+	end
+	love.graphics.rectangle('fill', 456, 844, 4, 2)
+	-- engine left
+	if not ship_view.engineBreak[2] then
+		love.graphics.setColor(0, 255, 0)
+		love.graphics.rectangle('fill', 278, 844, 40, 2)
+	end
+	love.graphics.rectangle('fill', 456, 844, 4, 2)
+	-- reset color
+	love.graphics.setColor(255,255,255)
+end
 
 
 
@@ -126,13 +157,9 @@ function ship_view:update(dt)
 	updateStars(stars, ship_view.speed)
 	local colliding = updateAsteroids(asteroids, ship_view.speed)
 	updateShip(dt, colliding)
+	updateEngines()
 	updateCamera()
 	lightWorld:update(dt)
-	if ship_view.engineBreak then
-		lightsOn({'engine1', 'engine2'})
-	else
-		lightsOff({'engine1', 'engine2'})
-	end
 	playSounds()
 end
 
@@ -142,6 +169,7 @@ function ship_view:draw()
 	lightWorld:draw(function()
 		drawStars(stars)
 		drawShip()
+		drawEngines()
 		drawAsteroids(asteroids)
 		-- drawBlocks()
 		player:draw()

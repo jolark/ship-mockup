@@ -28,10 +28,17 @@ function Player:new()
 			love.graphics.newQuad(0, 10, 30, 10, 30, 30),
 		}, 0.75),
 		canSwitchToCockpit = false,
-		canSwitchToEngines = false
+		canSwitchToEngineLeft = false,
+		canSwitchToEngineRight = false
 	}
 	setmetatable(player, { __index = Player })
 	return player
+end
+
+function Player:isNear(x, y, dist)
+	local dx = player.x - x 
+	local dy = player.y - y
+	return math.sqrt(dx*dx + dy*dy) < (dist or 50) 
 end
 
 -- LÖVE functions
@@ -81,29 +88,12 @@ function Player:update(world, cols_len, dt)
 		self.charAnimation.currentTime = 0
 	end
 
-	-- near engines
-	local x1 = player.x - 380 -- right engine x 
-	local y1 = player.y - 820 -- right engine y
-	local x2 = player.x - 380 -- left engine x 
-	local y2 = player.y - 400 -- left engine y
-	if math.sqrt(x1*x1 + y1*y1) < 50 or math.sqrt(x2*x2 + y2*y2) < 50 then
-		self.canSwitchToEngines = true
-	else
-		self.canSwitchToEngines = false
-	end
-	if self.canSwitchToEngines then
-		animationUpdate(self.switchAnimation, dt)
-	end
+	-- is player near engines or cockpit ?
+	self.canSwitchToEngineLeft = self:isNear(380, 400)
+	self.canSwitchToEngineRight = self:isNear(380, 820)
+	self.canSwitchToCockpit = self:isNear(1150, 500)
 
-	-- near cockpit
-	local x = player.x - 1150 -- cockpit x
-	local y = player.y - 500 -- cockpit y
-	if math.sqrt(x*x + y*y) < 30 then
-		self.canSwitchToCockpit = true
-	else
-		self.canSwitchToCockpit = false
-	end
-	if self.canSwitchToCockpit then
+	if self.canSwitchToCockpit or self.canSwitchToEngineLeft or self.canSwitchToEngineRight then
 		animationUpdate(self.switchAnimation, dt)
 	end
 end
@@ -112,7 +102,7 @@ function Player:draw()
 	local spriteNum = math.floor(self.charAnimation.currentTime / self.charAnimation.duration * #self.charAnimation.quads) + 1
 	love.graphics.draw(self.charAnimation.spriteSheet, self.charAnimation.quads[spriteNum], self.x, self.y, self.charAnimation.rot, 2, 2, 12, 12)
 	
-	if self.canSwitchToCockpit or self.canSwitchToEngines then
+	if self.canSwitchToCockpit or self.canSwitchToEngineLeft or self.canSwitchToEngineRight then
 		local spriteNum = math.floor(self.switchAnimation.currentTime / self.switchAnimation.duration * #self.switchAnimation.quads) + 1
 	love.graphics.draw(self.switchAnimation.spriteSheet, self.switchAnimation.quads[spriteNum], self.x, self.y, 0, 2, 2, 20, 20)
 	end

@@ -7,12 +7,12 @@ function addShipLights(lightWorld, blocks)
 	mainroomlight = lightWorld:newLight(624, 648, 155, 130, 0, 1500)
 	mainroomlight:setGlowStrength(0.25)
 	mainroomlight:setSmooth(1.5)
-
-	engineroomlight1 = lightWorld:newLight(272, 786, 130, 0, 0, 300)
+	-- engine left
+	engineroomlight1 = lightWorld:newLight(272, 418, 130, 0, 0, 300)
 	engineroomlight1:setGlowStrength(0.5)
 	engineroomlight1:setSmooth(1.5)
-
-	engineroomlight2 = lightWorld:newLight(272, 418, 130, 0, 0, 300)
+	-- engine right
+	engineroomlight2 = lightWorld:newLight(272, 786, 130, 0, 0, 300)
 	engineroomlight2:setGlowStrength(0.5)
 	engineroomlight2:setSmooth(1.5)
 

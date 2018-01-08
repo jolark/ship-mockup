@@ -5,7 +5,8 @@ local Gamestate = require 'lib.hump.gamestate'
 require 'player'
 local ship_view = require 'ship_view'
 local cockpit_view = require 'cockpit_view'
-local engines_view = require 'engines_view'
+local engines_view_left = require 'engines_view'
+local engines_view_right = require 'engines_view'
 
 -- globals
 player = Player:new()
@@ -24,10 +25,13 @@ function love.load()
 	-- load states
 	ship_view:load()
 	cockpit_view:load()
-	engines_view:load()
+	engines_view_left:load()
+	engines_view_left.engine = 'left'
+	engines_view_right:load()
+	engines_view_right.engine = 'right'
 
 	Gamestate.registerEvents()
-    Gamestate.switch(ship_view, false, 1)
+    Gamestate.switch(ship_view, {false, false}, 1)
 end
 
 function love.update(dt)
@@ -35,11 +39,14 @@ function love.update(dt)
 		if state == 'ship' and player.canSwitchToCockpit then
 			Gamestate.switch(cockpit_view, ship_view.speed)
 			state = 'cockpit'
-		elseif state == 'ship' and player.canSwitchToEngines then
-			Gamestate.switch(engines_view, ship_view.engineBreak)
+		elseif state == 'ship' and player.canSwitchToEngineLeft then
+			Gamestate.switch(engines_view_left, ship_view.engineBreak[1])
+			state = 'engines'
+		elseif state == 'ship' and player.canSwitchToEngineRight then
+			Gamestate.switch(engines_view_right, ship_view.engineBreak[2])
 			state = 'engines'
 		elseif state == 'cockpit' or state == 'engines' then
-			Gamestate.switch(ship_view, engines_view.engineBreak, cockpit_view.speed)
+			Gamestate.switch(ship_view, {engines_view_left.engineBreak, engines_view_right.engineBreak}, cockpit_view.speed)
 			state = 'ship'
 		end
 		keypressed = true

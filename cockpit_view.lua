@@ -94,7 +94,7 @@ function cockpit_view:draw()
 	-- space outside
 	space.draw()
 	-- cockpit
-	love.graphics.draw(image, 0, 0, 0, 2)
+	love.graphics.draw(image, 0, 0, 0, love.graphics.getWidth() / image:getWidth(), love.graphics.getHeight() / image:getHeight())
 	love.graphics.draw(imageShift, 818, 490 - cockpit_view.speed * 10, 0, 2)
 	love.graphics.setColor(255,255,255, 30)
 	love.graphics.draw(imageShift, 818, 290 + cockpit_view.speed * 10, 0, 2, -math.pi / 2)

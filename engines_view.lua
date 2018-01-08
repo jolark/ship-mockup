@@ -1,4 +1,4 @@
-local engines_view = {}
+local engines_view = {engine='none'}
 
 
 -- libs
@@ -99,6 +99,7 @@ function engines_view:enter(previous, engineBreak)
 	if engineBreak then
 		shuffleTubes()
 	end
+	print(engines_view.engine)
 end
 
 

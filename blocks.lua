@@ -35,8 +35,8 @@ function initBlocks(world)
 	addBlock(world, blocks,  800, 726, 208, 150)
 	addBlock(world, blocks,  954, 672, 60, 60)
 	-- engine boards
-	addBlock(world, blocks,  264, 338, 210, 44)
-	addBlock(world, blocks,  264, 832, 210, 44)
+	-- addBlock(world, blocks,  264, 338, 210, 44)
+	-- addBlock(world, blocks,  264, 832, 210, 44)
 	-- sofa
 	-- addBlock(world, blocks,  652, 338, 212, 60)
 	-- addBlock(world, blocks,  652, 396, 60, 60)
