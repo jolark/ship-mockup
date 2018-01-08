@@ -19,6 +19,8 @@ local scrollingTextStrs = { 'DESTINATION : TRT-9123', 'ARRIVAL IN : 92 DAYS' }
 local currentStr = 1
 local scrollingTextOffset = 0
 
+local maxSpeed = 8
+
 local leds = {
 	-- left
 	-- first column
@@ -54,6 +56,17 @@ end
 
 -- LÖVE functions
 
+function cockpit_view:enter(previous, engineBreak)
+	maxSpeed = 8
+	if engineBreak[1] or engineBreak[2] then
+		maxSpeed = 4
+	end
+	if engineBreak[1] and engineBreak[2] then
+		maxSpeed = 1
+	end
+	cockpit_view.speed = math.min(cockpit_view.speed, maxSpeed)	
+end
+
 function cockpit_view:load()
 	space.load()
 	love.graphics.setFont(font)
@@ -64,9 +77,9 @@ function cockpit_view:update(dt)
 	space.update(dt, cockpit_view.speed)
 	if not keypressed then
 		if love.keyboard.isDown('up') then
-			cockpit_view.speed = math.min(8, cockpit_view.speed + 1)
+			cockpit_view.speed = math.min(maxSpeed, cockpit_view.speed + 1)
 		elseif love.keyboard.isDown('down') then
-			cockpit_view.speed = math.max(0.1, cockpit_view.speed - 1)
+			cockpit_view.speed = math.max(1, cockpit_view.speed - 1)
 		end
 	end
 	keypressed = love.keyboard.isDown('up', 'down')

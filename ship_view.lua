@@ -1,4 +1,4 @@
-local ship_view = { engineBreak = {false, false}, speed = 1 }
+local ship_view = { engineBreak = {0, 0}, speed = 1 }
 
 -- libs
 local Bump   = require 'lib.bump'
@@ -53,10 +53,10 @@ local function updateShip(dt, colliding)
 	if #colliding > 0 then
 		if math.random() > 0.90 then
 			tilt = true
-			if math.random() > 0.90 then
+			if not ship_view.engineBreak[1] and math.random() > 0.90 then
 				ship_view.engineBreak[1] = true
 			end
-			if math.random() > 0.90 then
+			if not ship_view.engineBreak[2] and math.random() > 0.90 then
 				ship_view.engineBreak[2] = true
 			end
 		end
@@ -83,6 +83,13 @@ local function updateEngines()
 		lightsOn({'engine2'})
 	else
 		lightsOff({'engine2'})
+	end
+	ship_view.speed = 8
+	if ship_view.engineBreak[1] or ship_view.engineBreak[2] then
+		ship_view.speed = 4
+	end
+	if ship_view.engineBreak[1] and ship_view.engineBreak[2] then
+		ship_view.speed = 1
 	end
 end
 

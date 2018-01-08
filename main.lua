@@ -37,7 +37,7 @@ end
 function love.update(dt)
 	if love.keyboard.isDown('return') and not keypressed then
 		if state == 'ship' and player.canSwitchToCockpit then
-			Gamestate.switch(cockpit_view, ship_view.speed)
+			Gamestate.switch(cockpit_view, ship_view.engineBreak)
 			state = 'cockpit'
 		elseif state == 'ship' and player.canSwitchToEngineLeft then
 			Gamestate.switch(engines_view_left, ship_view.engineBreak[1])

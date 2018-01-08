@@ -31,17 +31,17 @@ local function nextDown(tubes, tube)
 	return tubes[(tube.x - 1 ) * 4 + tube.y + 1]
 end
 
-function isConnected(tubes, tube, visited)
-	if tube.x == 1 then
+function isConnected(tubes, tube, visited, firstcolumn)
+	if tube.x == firstcolumn then
 		return tube.direction ~= 'right'
 	else
 		local ind = (tube.x - 1) * 4 + tube.y
 		if not inTable(visited, ind) then
 			table.insert(visited, ind)
-			return (tube.direction ~= 'right' and tube.x > 1 and nextLeft(tubes, tube).direction ~= 'left' and isConnected(tubes, nextLeft(tubes, tube), visited))
-				or (tube.direction ~= 'left' and tube.x < 5 and nextRight(tubes, tube).direction ~= 'right' and isConnected(tubes, nextRight(tubes, tube), visited))
-				or (tube.direction ~= 'down' and tube.y > 1 and nextUp(tubes, tube).direction ~= 'up' and isConnected(tubes, nextUp(tubes, tube), visited))
-				or (tube.direction ~= 'up' and tube.y < 4 and nextDown(tubes, tube).direction ~= 'down' and isConnected(tubes, nextDown(tubes, tube), visited))
+			return (tube.direction ~= 'right' and tube.x > 1 and nextLeft(tubes, tube).direction ~= 'left' and isConnected(tubes, nextLeft(tubes, tube), visited, firstcolumn))
+				or (tube.direction ~= 'left' and tube.x < 5 and nextRight(tubes, tube).direction ~= 'right' and isConnected(tubes, nextRight(tubes, tube), visited, firstcolumn))
+				or (tube.direction ~= 'down' and tube.y > 1 and nextUp(tubes, tube).direction ~= 'up' and isConnected(tubes, nextUp(tubes, tube), visited, firstcolumn))
+				or (tube.direction ~= 'up' and tube.y < 4 and nextDown(tubes, tube).direction ~= 'down' and isConnected(tubes, nextDown(tubes, tube), visited, firstcolumn))
 		end
 	end
 end

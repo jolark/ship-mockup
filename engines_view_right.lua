@@ -20,7 +20,7 @@ local keypressed = false
 
 
 local function drawTube(tube)
-	if isConnected(tubes, tube, {}) then
+	if isConnected(tubes, tube, {}, 1) then
 		love.graphics.draw(imageTubeFull, 568 + 44 + (tube.x - 1) * 100, 192 + 44 + (tube.y - 1) * 100, tubeRotation(tube.direction), 2, 2, 22, 22)
 	else
 		love.graphics.draw(imageTube, 568 + 44 + (tube.x - 1) * 100, 192 + 44 + (tube.y - 1) * 100, tubeRotation(tube.direction), 2, 2, 22, 22)
@@ -46,7 +46,7 @@ function engines_view_right:update(dt)
 	-- are engines ok ?
 	local allOK = true
 	for i=1,4 do -- ugly access to last column
-		enginesOk[i] = tubes[i + 16].direction ~= 'left' and isConnected(tubes, tubes[i + 16], {})
+		enginesOk[i] = tubes[i + 16].direction ~= 'left' and isConnected(tubes, tubes[i + 16], {}, 1)
 		if not enginesOk[i] then
 			allOK = false
 		end
