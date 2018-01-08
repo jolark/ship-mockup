@@ -1,25 +1,13 @@
-local engines_view = {engine='none'}
-
 
 -- libs
 local Gamestate = require 'lib.hump.gamestate'
 
 require 'utils'
 
-local image = love.graphics.newImage('img/engines-view.png')
-local imageTube = love.graphics.newImage('img/tube.png')
-local imageTubeFull = love.graphics.newImage('img/tube-full.png')
-
 local directions = {'up', 'right', 'down', 'left' }
 
-local tubes = {}
-local selected = {x=1, y=1}
-local enginesOk = {false, false, false, false}
 
-local keypressed = false
-
-
-local function turn(direction)
+function turn(direction)
 	for i,d in ipairs(directions) do
 		if direction == d then
 			return directions[i % #directions + 1]
@@ -27,38 +15,38 @@ local function turn(direction)
 	end
 end
 
-local function nextLeft(tube)
+local function nextLeft(tubes, tube)
 	return tubes[(tube.x - 1 ) * 4 + tube.y - 4]
 end
 
-local function nextRight(tube)
+local function nextRight(tubes, tube)
 	return tubes[(tube.x - 1 ) * 4 + tube.y + 4]
 end
 
-local function nextUp(tube)
+local function nextUp(tubes, tube)
 	return tubes[(tube.x - 1 ) * 4 + tube.y - 1]
 end
 
-local function nextDown(tube)
+local function nextDown(tubes, tube)
 	return tubes[(tube.x - 1 ) * 4 + tube.y + 1]
 end
 
-local function isConnected(tube, visited)
+function isConnected(tubes, tube, visited)
 	if tube.x == 1 then
 		return tube.direction ~= 'right'
 	else
 		local ind = (tube.x - 1) * 4 + tube.y
 		if not inTable(visited, ind) then
 			table.insert(visited, ind)
-			return (tube.direction ~= 'right' and tube.x > 1 and nextLeft(tube).direction ~= 'left' and isConnected(nextLeft(tube), visited))
-				or (tube.direction ~= 'left' and tube.x < 5 and nextRight(tube).direction ~= 'right' and isConnected(nextRight(tube), visited))
-				or (tube.direction ~= 'down' and tube.y > 1 and nextUp(tube).direction ~= 'up' and isConnected(nextUp(tube), visited))
-				or (tube.direction ~= 'up' and tube.y < 4 and nextDown(tube).direction ~= 'down' and isConnected(nextDown(tube), visited))
+			return (tube.direction ~= 'right' and tube.x > 1 and nextLeft(tubes, tube).direction ~= 'left' and isConnected(tubes, nextLeft(tubes, tube), visited))
+				or (tube.direction ~= 'left' and tube.x < 5 and nextRight(tubes, tube).direction ~= 'right' and isConnected(tubes, nextRight(tubes, tube), visited))
+				or (tube.direction ~= 'down' and tube.y > 1 and nextUp(tubes, tube).direction ~= 'up' and isConnected(tubes, nextUp(tubes, tube), visited))
+				or (tube.direction ~= 'up' and tube.y < 4 and nextDown(tubes, tube).direction ~= 'down' and isConnected(tubes, nextDown(tubes, tube), visited))
 		end
 	end
 end
 
-local function tubeRotation(direction)
+function tubeRotation(direction)
 	if direction == 'up' then
 		return 0
 	elseif direction == 'down' then
@@ -70,21 +58,13 @@ local function tubeRotation(direction)
 	end
 end
 
-local function drawTube(tube)
-	if isConnected(tube, {}) then
-		love.graphics.draw(imageTubeFull, 568 + 44 + (tube.x - 1) * 100, 192 + 44 + (tube.y - 1) * 100, tubeRotation(tube.direction), 2, 2, 22, 22)
-	else
-		love.graphics.draw(imageTube, 568 + 44 + (tube.x - 1) * 100, 192 + 44 + (tube.y - 1) * 100, tubeRotation(tube.direction), 2, 2, 22, 22)
-	end
-end
-
-local function shuffleTubes()
+function shuffleTubes(tubes)
 	for _,tube in ipairs(tubes) do
 		tube.direction = choose(directions)
 	end
 end
 
-local function initialDirection(index)
+function initialDirection(index)
 	if index % 2 == 0 then
 		return 'up'
 	else
@@ -92,26 +72,7 @@ local function initialDirection(index)
 	end
 end
 
----- LÖVE functions
-
-function engines_view:enter(previous, engineBreak)
-	engines_view.engineBreak = engineBreak
-	if engineBreak then
-		shuffleTubes()
-	end
-	print(engines_view.engine)
-end
-
-
-function engines_view:load()
-	for i=1,5 do -- tube columns
-		for j=1,4 do -- tube rows
-			table.insert(tubes, {x=i, y=j, direction=initialDirection(j)})
-		end
-	end
-end
-
-function engines_view:update(dt)
+function engineViewUpdate(selected, keypressed, tubes)
 	if love.keyboard.isDown('up') and not keypressed then
 		selected.y = math.max(1, selected.y - 1)
 		keypressed = true
@@ -129,55 +90,14 @@ function engines_view:update(dt)
 		tubes[sel].direction = turn(tubes[sel].direction)
 		keypressed = true
 	end
-	if not love.keyboard.isDown('up', 'down', 'left', 'right', 'space') then
-		keypressed = false
-	end
 
-	-- are engines ok ?
-	local allOK = true
-	for i=1,4 do -- ugly access to last column
-		enginesOk[i] = tubes[i + 16].direction ~= 'left' and isConnected(tubes[i + 16], {})
-		if not enginesOk[i] then
-			allOK = false
+	return love.keyboard.isDown('up', 'down', 'left', 'right', 'space')	
+end
+
+function engineViewLoad(tubes)
+	for i=1,5 do -- tube columns
+		for j=1,4 do -- tube rows
+			table.insert(tubes, {x=i, y=j, direction=initialDirection(j)})
 		end
 	end
-
-	engines_view.engineBreak = not allOK
-
 end
-
-
-function engines_view:draw()
-	-- tubes
-	love.graphics.draw(image, 0, 0, 0, 2)
-	for _,tube in ipairs(tubes) do
-		drawTube(tube)
-	end
-	-- engines leds
-	love.graphics.setColor(0,200,0)
-	if enginesOk[1] then
-		love.graphics.rectangle('fill', 1075, 228, 26, 14)
-		love.graphics.rectangle('fill', 1178, 232, 188, 4)
-	end
-	if enginesOk[2] then
-		love.graphics.rectangle('fill', 1075, 328, 26, 14)
-		love.graphics.rectangle('fill', 1178, 334, 188, 4)
-	end
-	if enginesOk[3] then
-		love.graphics.rectangle('fill', 1075, 428, 26, 14)
-		love.graphics.rectangle('fill', 1178, 436, 188, 4)
-	end
-	if enginesOk[4] then
-		love.graphics.rectangle('fill', 1075, 528, 26, 14)
-		love.graphics.rectangle('fill', 1178, 534, 188, 4)
-	end
-	-- leds
-
-	-- selected
-	love.graphics.setColor(0,200,0, 50)
-	love.graphics.rectangle('fill', 567 + (selected.x - 1) * 100, 191 + (selected.y - 1) * 100, 90, 90)
-	-- reset colors
-	love.graphics.setColor(255,255,255)
-end
-
-return engines_view

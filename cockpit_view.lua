@@ -62,16 +62,14 @@ end
 
 function cockpit_view:update(dt)
 	space.update(dt, cockpit_view.speed)
-	if love.keyboard.isDown('up') and not keypressed then
-		cockpit_view.speed = math.min(8, cockpit_view.speed + 1)
-		keypressed = true
-	elseif love.keyboard.isDown('down') and not keypressed then
-		cockpit_view.speed = math.max(0.1, cockpit_view.speed - 1)
-		keypressed = true
+	if not keypressed then
+		if love.keyboard.isDown('up') then
+			cockpit_view.speed = math.min(8, cockpit_view.speed + 1)
+		elseif love.keyboard.isDown('down') then
+			cockpit_view.speed = math.max(0.1, cockpit_view.speed - 1)
+		end
 	end
-	if not love.keyboard.isDown('up') and not love.keyboard.isDown('down') then
-		keypressed = false
-	end
+	keypressed = love.keyboard.isDown('up', 'down')
 	-- text
 	local scrollingSpeed = 3
 	scrollingTextOffset = scrollingTextOffset + dt * scrollingSpeed
@@ -94,7 +92,7 @@ function cockpit_view:draw()
 	-- space outside
 	space.draw()
 	-- cockpit
-	love.graphics.draw(image, 0, 0, 0, love.graphics.getWidth() / image:getWidth(), love.graphics.getHeight() / image:getHeight())
+	love.graphics.draw(image, 0, 0, 0, 2)
 	love.graphics.draw(imageShift, 818, 490 - cockpit_view.speed * 10, 0, 2)
 	love.graphics.setColor(255,255,255, 30)
 	love.graphics.draw(imageShift, 818, 290 + cockpit_view.speed * 10, 0, 2, -math.pi / 2)

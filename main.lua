@@ -5,8 +5,8 @@ local Gamestate = require 'lib.hump.gamestate'
 require 'player'
 local ship_view = require 'ship_view'
 local cockpit_view = require 'cockpit_view'
-local engines_view_left = require 'engines_view'
-local engines_view_right = require 'engines_view'
+local engines_view_left = require 'engines_view_left'
+local engines_view_right = require 'engines_view_right'
 
 -- globals
 player = Player:new()

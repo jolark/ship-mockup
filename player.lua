@@ -5,8 +5,8 @@ Player = {}
 -- Player functions
 function Player:new()
 	local player = { 
-		x=850,
-		y=450,
+		x=870,
+		y=470,
 		w=10,
 		h=10,
 		speed = 250,
