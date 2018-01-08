@@ -115,9 +115,9 @@ local function drawEngines()
 	-- engine left
 	if not ship_view.engineBreak[2] then
 		love.graphics.setColor(0, 255, 0)
-		love.graphics.rectangle('fill', 278, 844, 40, 2)
+		love.graphics.rectangle('fill', 272, 370, 40, 2)
 	end
-	love.graphics.rectangle('fill', 456, 844, 4, 2)
+	love.graphics.rectangle('fill', 452, 370, 4, 2)
 	-- reset color
 	love.graphics.setColor(255,255,255)
 end

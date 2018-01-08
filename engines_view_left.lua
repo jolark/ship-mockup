@@ -21,9 +21,9 @@ local keypressed = false
 
 local function drawTube(tube)
 	if isConnected(tubes, tube, {}) then
-		love.graphics.draw(imageTubeFull, 568 + 44 + (tube.x - 1) * 100, 192 + 44 + (tube.y - 1) * 100, tubeRotation(tube.direction), 2, 2, 22, 22)
+		love.graphics.draw(imageTubeFull, 310 + 44 + (tube.x - 1) * 100, 192 + 44 + (tube.y - 1) * 100, tubeRotation(tube.direction), 2, 2, 22, 22)
 	else
-		love.graphics.draw(imageTube, 568 + 44 + (tube.x - 1) * 100, 192 + 44 + (tube.y - 1) * 100, tubeRotation(tube.direction), 2, 2, 22, 22)
+		love.graphics.draw(imageTube, 310 + 44 + (tube.x - 1) * 100, 192 + 44 + (tube.y - 1) * 100, tubeRotation(tube.direction), 2, 2, 22, 22)
 	end
 end
 
@@ -58,33 +58,33 @@ end
 
 function engines_view_left:draw()
 	-- tubes
-	love.graphics.draw(image, 0, 0, 0, 2)
+	love.graphics.draw(image, 0, 0, 0, -2, 2, image:getWidth(), 0)
 	for _,tube in ipairs(tubes) do
 		drawTube(tube)
 	end
 	-- engines leds
 	love.graphics.setColor(0,200,0)
 	if enginesOk[1] then
-		love.graphics.rectangle('fill', 1075, 228, 26, 14)
-		love.graphics.rectangle('fill', 1178, 232, 188, 4)
+		love.graphics.rectangle('fill', 266, 228, 26, 14)
+		love.graphics.rectangle('fill', 0, 232, 188, 4)
 	end
 	if enginesOk[2] then
-		love.graphics.rectangle('fill', 1075, 328, 26, 14)
-		love.graphics.rectangle('fill', 1178, 334, 188, 4)
+		love.graphics.rectangle('fill', 266, 328, 26, 14)
+		love.graphics.rectangle('fill', 0, 334, 188, 4)
 	end
 	if enginesOk[3] then
-		love.graphics.rectangle('fill', 1075, 428, 26, 14)
-		love.graphics.rectangle('fill', 1178, 436, 188, 4)
+		love.graphics.rectangle('fill', 266, 428, 26, 14)
+		love.graphics.rectangle('fill', 0, 436, 188, 4)
 	end
 	if enginesOk[4] then
-		love.graphics.rectangle('fill', 1075, 528, 26, 14)
-		love.graphics.rectangle('fill', 1178, 534, 188, 4)
+		love.graphics.rectangle('fill', 266, 528, 26, 14)
+		love.graphics.rectangle('fill', 0, 534, 188, 4)
 	end
 	-- leds
 
 	-- selected
 	love.graphics.setColor(0,200,0, 50)
-	love.graphics.rectangle('fill', 567 + (selected.x - 1) * 100, 191 + (selected.y - 1) * 100, 90, 90)
+	love.graphics.rectangle('fill', 310 + (selected.x - 1) * 100, 191 + (selected.y - 1) * 100, 90, 90)
 	-- reset colors
 	love.graphics.setColor(255,255,255)
 end
