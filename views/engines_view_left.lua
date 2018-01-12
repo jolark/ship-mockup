@@ -2,16 +2,17 @@
 local Gamestate = require 'lib.hump.gamestate'
 
 require 'utils'
-require 'engines_view'
+require 'views.engine'
 
 
 local engines_view_left = {}
+
+local engine = Engine:new()
 
 local image = love.graphics.newImage('img/engines-view.png')
 local imageTube = love.graphics.newImage('img/tube.png')
 local imageTubeFull = love.graphics.newImage('img/tube-full.png')
 
-local tubes = {}
 local selected = {x=1, y=1}
 local enginesOk = {false, false, false, false}
 
@@ -20,46 +21,46 @@ local keypressed = false
 
 
 local function drawTube(tube)
-	if isConnected(tubes, tube, {}, 5) then
-		love.graphics.draw(imageTubeFull, 310 + 44 + (tube.x - 1) * 100, 192 + 44 + (tube.y - 1) * 100, tubeRotation(tube.direction), 2, 2, 22, 22)
+	if engine:isConnected(tube, {}, 5) then
+		love.graphics.draw(imageTubeFull, 310 + 44 + (tube.x - 1) * 100, 192 + 44 + (tube.y - 1) * 100, engine:tubeRotation(tube.direction), 2, 2, 22, 22)
 	else
-		love.graphics.draw(imageTube, 310 + 44 + (tube.x - 1) * 100, 192 + 44 + (tube.y - 1) * 100, tubeRotation(tube.direction), 2, 2, 22, 22)
+		love.graphics.draw(imageTube, 310 + 44 + (tube.x - 1) * 100, 192 + 44 + (tube.y - 1) * 100, engine:tubeRotation(tube.direction), 2, 2, 22, 22)
 	end
 end
 
 ---- LÖVE functions
 
-function engines_view_left:enter(previous, engineBreak)
-	engines_view_left.engineBreak = engineBreak
-	if engineBreak then
-		shuffleTubes(tubes)
+function engines_view_left:enter(previous, world, player)
+	engines_view_left.world = world
+	if engines_view_left.world.ship.engineLeftBreak then
+		engine:shuffleTubes()
 	end
 end
 
 
-function engines_view_left:load()
-	engineViewLoad(tubes)
+function engines_view_left:init()
+	engine:engineViewLoad()
 end
 
 function engines_view_left:update(dt)
-	keypressed = engineViewUpdate(selected, keypressed, tubes)
+	keypressed = engine:engineViewUpdate(selected, keypressed)
 	-- are engines ok ?
 	local allOK = true
 	for i=1,4 do -- ugly access to last column
-		enginesOk[i] = tubes[i].direction ~= 'right' and isConnected(tubes, tubes[i], {}, 5)
+		enginesOk[i] = engine.tubes[i].direction ~= 'right' and engine:isConnected(engine.tubes[i], {}, 5)
 		if not enginesOk[i] then
 			allOK = false
 		end
 	end
 
-	engines_view_left.engineBreak = not allOK
+	engines_view_left.world.ship.engineLeftBreak = not allOK
 end
 
 
 function engines_view_left:draw()
 	-- tubes
 	love.graphics.draw(image, 0, 0, 0, -2, 2, image:getWidth(), 0)
-	for _,tube in ipairs(tubes) do
+	for _,tube in ipairs(engine.tubes) do
 		drawTube(tube)
 	end
 	-- engines leds

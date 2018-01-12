@@ -1,7 +1,5 @@
 local Vector = require 'lib.hump.vector'
 
-require 'utils'
-
 -- Asteroids
 
 local crashSound1 = love.audio.newSource( 'sound/207930__klankbeeld__bang-prison-door-loop-130903-00-1.mp3', 'static' )

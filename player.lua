@@ -36,8 +36,8 @@ function Player:new()
 end
 
 function Player:isNear(x, y, dist)
-	local dx = player.x - x 
-	local dy = player.y - y
+	local dx = self.x - x 
+	local dy = self.y - y
 	return math.sqrt(dx*dx + dy*dy) < (dist or 50) 
 end
 

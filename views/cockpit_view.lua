@@ -1,11 +1,11 @@
-local cockpit_view = { speed = 1 }
+local cockpit_view = {}
 
 
 -- libs
 local Gamestate = require 'lib.hump.gamestate'
 
 -- modules
-local space = require 'space'
+local space = require 'views.space'
 
 require 'utils'
 
@@ -41,8 +41,6 @@ local leds = {
 }
 
 
-
-
 -- draw led with fixed size
 local function drawLed(led)
 	love.graphics.setColor(led.color)
@@ -52,34 +50,33 @@ local function drawLed(led)
 end
 
 
-
-
 -- LÖVE functions
 
-function cockpit_view:enter(previous, engineBreak)
+function cockpit_view:enter(previous, world, player)
+	cockpit_view.world = world
 	maxSpeed = 8
-	if engineBreak[1] or engineBreak[2] then
+	if cockpit_view.world.ship.engineLeftBreak or cockpit_view.world.ship.engineRightBreak then
 		maxSpeed = 4
 	end
-	if engineBreak[1] and engineBreak[2] then
+	if cockpit_view.world.ship.engineLeftBreak and cockpit_view.world.ship.engineRightBreak then
 		maxSpeed = 1
 	end
-	cockpit_view.speed = math.min(cockpit_view.speed, maxSpeed)	
+	cockpit_view.world.ship.speed = math.min(world.ship.speed, maxSpeed)	
 end
 
-function cockpit_view:load()
+function cockpit_view:init()
 	space.load()
 	love.graphics.setFont(font)
 	scrollingText = love.graphics.newText(font, '')
 end
 
 function cockpit_view:update(dt)
-	space.update(dt, cockpit_view.speed)
+	space.update(dt, cockpit_view.world.ship.speed)
 	if not keypressed then
 		if love.keyboard.isDown('up') then
-			cockpit_view.speed = math.min(maxSpeed, cockpit_view.speed + 1)
+			cockpit_view.world.ship.speed = math.min(maxSpeed, cockpit_view.world.ship.speed + 1)
 		elseif love.keyboard.isDown('down') then
-			cockpit_view.speed = math.max(1, cockpit_view.speed - 1)
+			cockpit_view.world.ship.speed = math.max(1, cockpit_view.world.ship.speed - 1)
 		end
 	end
 	keypressed = love.keyboard.isDown('up', 'down')
@@ -106,17 +103,25 @@ function cockpit_view:draw()
 	space.draw()
 	-- cockpit
 	love.graphics.draw(image, 0, 0, 0, 2)
-	love.graphics.draw(imageShift, 818, 490 - cockpit_view.speed * 10, 0, 2)
+	love.graphics.draw(imageShift, 818, 490 - cockpit_view.world.ship.speed * 10, 0, 2)
 	love.graphics.setColor(255,255,255, 30)
-	love.graphics.draw(imageShift, 818, 290 + cockpit_view.speed * 10, 0, 2, -math.pi / 2)
+	love.graphics.draw(imageShift, 818, 290 + cockpit_view.world.ship.speed * 10, 0, 2, -math.pi / 2)
 	love.graphics.setColor(255,255,255)
-	-- leds
-	for i=1,math.ceil(cockpit_view.speed) do
+	-- speed leds
+	for i=1,math.ceil(cockpit_view.world.ship.speed) do
 		love.graphics.setColor(0,200,0)
 		love.graphics.rectangle('fill', 802, 538 - i*12, 5, 2)
 		love.graphics.setColor(0,200,0, 30)
 		love.graphics.rectangle('fill', 802, 250 + i*12, 5, 2)
 	end
+	-- FIX THIS
+	for i=0, 8 - maxSpeed, -1 do
+		love.graphics.setColor(200,0,0)
+		love.graphics.rectangle('fill', 802, 538 - i*12, 5, 2)
+		love.graphics.setColor(200,0,0, 30)
+		love.graphics.rectangle('fill', 802, 250 + i*12, 5, 2)
+	end
+	-- decoration leds
 	for _,led in ipairs(leds) do
 		drawLed(led)
 	end
