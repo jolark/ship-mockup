@@ -24,7 +24,7 @@ function Television:update(dt)
     end
 end
 
-function Television:draw(dt)
+function Television:draw()
     ShipItem.draw(self)
     love.graphics.draw(image, self.x, self.y)
 end
