@@ -10,22 +10,27 @@ function ShipRoom:new(name, xpos, ypos, width, height, someaccess, somelights)
         position = {x=xpos, y=ypos} or {x=0, y=0},
         size = {w=width, h=height} or {w=0, h=0},
         access = someaccess or {up=false, down=false, right=false, left=false},
-		lights = somelights or {},
+		fakeLights = somelights or {},
+        realLights = {},
         items = {}
 	}
 	setmetatable(object, { __index = ShipRoom })
 	return object
 end
 
-function ShipRoom:addLight(lightworld, light)
-	local lite = lightworld:newLight(light.x, light.y, light.r, light.g, light.b, light.range)
-	lite:setGlowStrength(light.glow)
-	lite:setSmooth(light.smooth)
-	table.insert(self.lights, lite)
+-- called at creation
+function ShipRoom:addLight(light)
+    table.insert(self.fakeLights, light)
 end
 
-function ShipRoom:addWall(wall)
-	table.insert(self.walls, wall)
+-- called in ship_view : fake lights become real lights --FIXME ?
+function ShipRoom:activateLights(lightworld)
+    for _,light in ipairs(self.fakeLights) do
+        local lite = lightworld:newLight(light.x, light.y, light.r, light.g, light.b, light.range)
+        lite:setGlowStrength(light.glow)
+        lite:setSmooth(light.smooth)
+        table.insert(self.realLights, lite)
+    end
 end
 
 function ShipRoom:addItem(shipItem)
@@ -33,13 +38,13 @@ function ShipRoom:addItem(shipItem)
 end
 
 function ShipRoom:lightsOn()
-	for _,light in ipairs(self.lights) do
+	for _,light in ipairs(self.realLights) do
 		light:setVisible(true)
 	end
 end
 
 function ShipRoom:lightsOff()
-	for _,light in ipairs(self.lights) do
+	for _,light in ipairs(self.realLights) do
 		light:setVisible(false)
 	end
 end

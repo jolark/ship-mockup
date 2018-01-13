@@ -36,7 +36,7 @@ end
 
 -- LÖVE functions
 
-function Player:update(bumpworld, cols_len, dt)
+function Player:update(bumpworld, dt)
 	-- movement
 	local dx, dy = 0, 0
 	if love.keyboard.isDown('right') then

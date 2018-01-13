@@ -31,6 +31,8 @@ local engineControl = EngineControl:new(350, 350)
 room:addItem(engineControl)
 local cockpit = Cockpit:new(500, 500)
 room:addItem(cockpit)
+local mainlight = { x=400, y=600, r=30, g=100, b=0, range=300, glow=0.5, smooth=1.5 }
+room:addLight(mainlight)
 ship:addRoom(room)
 world.ship = ship
 

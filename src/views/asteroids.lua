@@ -90,7 +90,7 @@ function updateAsteroids(asteroids, ship)
     for _,x in ipairs(lostInSpace) do
         table.remove(asteroids, x)
     end
-    return colliding
+    return #colliding > 0
 end
 
 function drawAsteroids(asteroids)

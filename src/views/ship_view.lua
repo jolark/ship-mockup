@@ -12,22 +12,21 @@ require 'src.views.stars'
 
 local VIEW_SCALE = 1
 
--- World creation -- bump.lua stuff
+-- bump.lua stuff
 local bumpWorld = Bump.newWorld()
+-- light.lua stuff
 local lightWorld
-local nbCollisions = 0 -- how many collisions are happening
-
+local playerShadow
+-- hump.camera stuff
 local camera
 
+-- background objects
 local asteroids = {}
 local stars = {}
-local playerShadow
-local tilt = false
 
 
 -- DEBUG TOOLS
 local blocks = {}
-
 local function drawBox(box, r,g,b)
     love.graphics.setColor(r,g,b,70)
     love.graphics.rectangle("fill", box.x, box.y, box.w, box.h)
@@ -41,7 +40,6 @@ local function drawBlocks()
     end
     love.graphics.setColor(255,255,255)
 end
-
 -- DEBUG TOOLS END
 
 -- Sounds
@@ -59,73 +57,11 @@ function updateCamera(player)
     playerShadow.x, playerShadow.y = player.x, player.y
 end
 
---local function updateShip(dt, colliding)
---	if #colliding > 0 then
---		if math.random() > 0.90 then
---			tilt = true
---			if not ship_view.world.ship.engineLeftBreak and math.random() > 0.90 then
---				ship_view.world.ship.engineLeftBreak = true
---			end
---			if not ship_view.world.ship.engineRightBreak and math.random() > 0.90 then
---				ship_view.world.ship.engineRightBreak = true
---			end
---		end
---	end
---end
 
---local function fuelUpdate()
---	ship_view.world.ship.fuelLevel = ship_view.world.ship.fuelLevel - 0.01 * ship_view.world.ship.speed
---end
-
---local function updateEngines()
---	if ship_view.world.ship.engineLeftBreak then
---		lightsOn({'engine1'})
---	else
---		lightsOff({'engine1'})
---	end
---	if ship_view.world.ship.engineRightBreak then
---		lightsOn({'engine2'})
---	else
---		lightsOff({'engine2'})
---	end
---	local maxSpeed = 8
---	if ship_view.world.ship.engineLeftBreak or ship_view.world.ship.engineRightBreak then
---		maxSpeed = 4
---	end
---	if ship_view.world.ship.engineLeftBreak and ship_view.world.ship.engineRightBreak then
---		maxSpeed = 1
---	end
---	ship_view.world.ship.speed = math.min(maxSpeed, ship_view.world.ship.speed)
---end
-
-
---local function drawEngines()
---	-- engine right
---	if not ship_view.world.ship.engineLeftBreak then
---		love.graphics.setColor(0, 255, 0)
---		love.graphics.rectangle('fill', 278, 844, 40, 2)
---	end
---	love.graphics.rectangle('fill', 456, 844, 4, 2)
---	-- engine left
---	if not ship_view.world.ship.engineRightBreak then
---		love.graphics.setColor(0, 255, 0)
---		love.graphics.rectangle('fill', 272, 370, 40, 2)
---	end
---	love.graphics.rectangle('fill', 452, 370, 4, 2)
---	-- reset color
---	love.graphics.setColor(255,255,255)
---end
-
-
-
-local function initLights()
-    --	-- FIXME : get light constructor params from somewhere
-    --	local lobbylight = { x=624, y=648, r=155, g=130, b=0, range=1500, glow = 0.25, smooth = 1.5 }
-    --	ship_view.world.ship.rooms[1]:addLight(lightWorld, lobbylight)
-    --	local engineleftlight = { x=272, y=418, r=130, g=0, b=0, range=300, glow=0.5, smooth=1.5 }
-    --	ship_view.world.ship.rooms[1]:addLight(lightWorld, engineleftlight)
-    --	local enginerightlight = { x=272, y=786, r=130, g=0, b=0, range=300, glow=0.5, smooth=1.5 }
-    --	ship_view.world.ship.rooms[1]:addLight(lightWorld, enginerightlight)
+local function initLights(ship)
+    for _,room in ipairs(ship.rooms) do
+        room:activateLights(lightWorld)
+    end
 end
 
 local function initBlock(block)
@@ -177,27 +113,21 @@ function ship_view:enter(previous, world, player)
 end
 
 function ship_view:update(dt)
-    nbCollisions = 0
-    ship_view.player:update(bumpWorld, nbCollisions, dt)
+    ship_view.player:update(bumpWorld, dt)
     updateStars(stars, ship_view.world.ship.speed)
     local colliding = updateAsteroids(asteroids, ship_view.world.ship)
-    -- updateShip(dt, colliding)
-    -- updateEngines()
-    -- fuelUpdate()
-    ship_view.world:update(dt, ship_view.player)
+    ship_view.world:update(dt, ship_view.player, colliding)
     updateCamera(ship_view.player)
-    -- lightWorld:update(dt)
+     lightWorld:update(dt)
     playSounds()
 end
 
 
 function ship_view:draw()
     camera:attach()
-    -- FIXME : lightworld burns memory
     lightWorld:draw(function()
         drawStars(stars)
         ship_view.world.ship:draw()
-        --		drawEngines()
         drawAsteroids(asteroids)
         drawBlocks(world)
         ship_view.player:draw()
