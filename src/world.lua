@@ -11,8 +11,8 @@ function World:new()
 	return object
 end
 
-function World:update(dt)
-	self.ship:update(dt)
+function World:update(dt, player)
+	self.ship:update(dt, player)
 	-- station:update(dt)
 end
 

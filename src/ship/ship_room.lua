@@ -10,7 +10,8 @@ function ShipRoom:new(name, xpos, ypos, width, height, someaccess, somelights)
         position = {x=xpos, y=ypos} or {x=0, y=0},
         size = {w=width, h=height} or {w=0, h=0},
         access = someaccess or {up=false, down=false, right=false, left=false},
-		lights = somelights or {}
+		lights = somelights or {},
+        items = {}
 	}
 	setmetatable(object, { __index = ShipRoom })
 	return object
@@ -27,25 +28,26 @@ function ShipRoom:addWall(wall)
 	table.insert(self.walls, wall)
 end
 
+function ShipRoom:addItem(shipItem)
+    table.insert(self.items, shipItem)
+end
+
 function ShipRoom:lightsOn()
-	for _,light in self.lights do
+	for _,light in ipairs(self.lights) do
 		light:setVisible(true)
 	end
 end
 
 function ShipRoom:lightsOff()
-	for _,light in self.lights do
+	for _,light in ipairs(self.lights) do
 		light:setVisible(false)
 	end
 end
 
 
-function ShipRoom:update(dt)
-end
-
-function ShipRoom:draw()
-	for i=1,self.size.w do
-		for j=1,self.size.h do
+function ShipRoom:drawWalls()
+    for i=1,self.size.w do
+        for j=1,self.size.h do
             if i == 1 and j == 1 then -- upleft corner
                 love.graphics.draw(cornerTile, self.position.x + TILE_SIZE * (i - 1), self.position.y + TILE_SIZE * (j - 1))
             elseif i == 1 and j == self.size.h then -- downleft corner
@@ -66,5 +68,19 @@ function ShipRoom:draw()
                 love.graphics.draw(floorTile, self.position.x + TILE_SIZE * (i - 1), self.position.y + TILE_SIZE * (j - 1))
             end
         end
-	end
+    end
+end
+
+
+function ShipRoom:update(dt, player)
+    for _,item in ipairs(self.items) do
+        item:update(dt, player)
+    end
+end
+
+function ShipRoom:draw()
+	self:drawWalls()
+    for _,item in ipairs(self.items) do
+        item:draw()
+    end
 end

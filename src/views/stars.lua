@@ -27,6 +27,6 @@ function drawStars(stars)
 	love.graphics.clear()
 	for _,star in ipairs(stars) do
 		love.graphics.setColor(255, 255, 255)
-		love.graphics.circle('fill', star.x, star.y, 2)
+		love.graphics.circle('fill', star.x, star.y, 1)
 	end
 end

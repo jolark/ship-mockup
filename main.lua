@@ -6,6 +6,7 @@ require 'src.player'
 require 'src.world'
 require 'src.ship.ship'
 require 'src.ship.ship_room'
+require 'src.ship.ship_items.engine_control'
 local ship_view = require 'src.views.ship_view'
 local cockpit_view = require 'src.views.cockpit_view'
 local engines_view_left = require 'src.views.engines_view_left'
@@ -23,10 +24,13 @@ local world = World:new()
 
 local ship = Ship:new()
 local room = ShipRoom:new('room1', 300, 300, 10, 10)
+local engineControl = EngineControl:new(350, 350)
+room:addItem(engineControl)
 ship:addRoom(room)
 world.ship = ship
 
 player:setPosition({x=350, y=350})
+
 
 -- TEST STUFF END
 

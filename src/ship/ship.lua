@@ -24,9 +24,9 @@ function Ship:getRooms()
     return self.rooms
 end
 
-function Ship:update(dt)
+function Ship:update(dt, player)
 	for _,room in ipairs(self.rooms) do
-		room:update(dt)
+		room:update(dt, player)
 	end
 end
 
