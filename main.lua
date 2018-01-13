@@ -5,21 +5,30 @@ local Gamestate = require 'lib.hump.gamestate'
 require 'player'
 require 'world'
 require 'ship.ship'
-require 'ship.lobby_room'
+require 'ship.ship_room'
 local ship_view = require 'views.ship_view'
 local cockpit_view = require 'views.cockpit_view'
 local engines_view_left = require 'views.engines_view_left'
 local engines_view_right = require 'views.engines_view_right'
+
+-- globals
+TILE_SIZE = 40
 
 -- main entities
 local player = Player:new()
 local world = World:new()
 
 
--- TEST DATA
+-- TEST STUFF
+
 local ship = Ship:new()
-ship:addRoom(LobbyRoom:new())
+local room = ShipRoom:new('room1', 300, 300, 10, 10)
+ship:addRoom(room)
 world.ship = ship
+
+player:setPosition({x=350, y=350})
+
+-- TEST STUFF END
 
 local keypressed = false
 local state = 'ship'

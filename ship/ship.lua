@@ -1,6 +1,6 @@
 require 'ship.ship_room'
 
-Ship = {}
+Ship = { }
 
 function Ship:new()
 	local object = {
@@ -19,6 +19,11 @@ function Ship:addRoom(shipRoom)
 	table.insert(self.rooms, shipRoom)
 end
 
+
+function Ship:getRooms()
+    return self.rooms
+end
+
 function Ship:update(dt)
 	for _,room in ipairs(self.rooms) do
 		room:update(dt)
@@ -26,7 +31,7 @@ function Ship:update(dt)
 end
 
 function Ship:draw()
-	love.graphics.draw(self.image, 0, 0, 0, 2)
+--	love.graphics.draw(self.image, 0, 0, 0, 2)
 	for _,room in ipairs(self.rooms) do
 		room:draw()
 	end

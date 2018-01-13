@@ -1,6 +1,6 @@
 require 'ship.ship'
 
-World = {}
+World = { }
 
 function World:new()
 	local object = {
