@@ -1,15 +1,15 @@
 -- libs
-local Gamestate = require 'lib.hump.gamestate'
+local Gamestate = require 'src.lib.hump.gamestate'
 
 -- modules
-require 'player'
-require 'world'
-require 'ship.ship'
-require 'ship.ship_room'
-local ship_view = require 'views.ship_view'
-local cockpit_view = require 'views.cockpit_view'
-local engines_view_left = require 'views.engines_view_left'
-local engines_view_right = require 'views.engines_view_right'
+require 'src.player'
+require 'src.world'
+require 'src.ship.ship'
+require 'src.ship.ship_room'
+local ship_view = require 'src.views.ship_view'
+local cockpit_view = require 'src.views.cockpit_view'
+local engines_view_left = require 'src.views.engines_view_left'
+local engines_view_right = require 'src.views.engines_view_right'
 
 -- globals
 TILE_SIZE = 40

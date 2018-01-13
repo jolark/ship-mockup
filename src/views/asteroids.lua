@@ -1,4 +1,4 @@
-local Vector = require 'lib.hump.vector'
+local Vector = require 'src.lib.hump.vector'
 
 -- Asteroids
 

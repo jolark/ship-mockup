@@ -1,4 +1,4 @@
-require 'ship.ship_room'
+require 'src.ship.ship_room'
 EngineRoom = {}
 
 function EngineRoom:new()

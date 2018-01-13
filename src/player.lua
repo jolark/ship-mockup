@@ -1,4 +1,4 @@
-require 'utils'
+require 'src.utils'
 
 Player = {}
 
@@ -84,10 +84,6 @@ function Player:update(world, cols_len, dt)
 	if dx ~= 0 or dy ~= 0 then
 		local cols
 		self.x, self.y, cols, cols_len = world:move(self, self.x + dx, self.y + dy)
-		for i=1, cols_len do
-			local col = cols[i]
-			-- print(('col.other = %s, col.type = %s, col.normal = %d,%d'):format(col.other, col.type, col.normal.x, col.normal.y))
-		end
 		animationUpdate(self.charAnimation, dt)
 	else
 		self.charAnimation.currentTime = 0

@@ -1,8 +1,8 @@
 -- libs
-local Gamestate = require 'lib.hump.gamestate'
+local Gamestate = require 'src.lib.hump.gamestate'
 
-require 'utils'
-require 'views.engine'
+require 'src.utils'
+require 'src.views.engine'
 
 
 local engines_view_left = {}

@@ -1,4 +1,4 @@
-require 'ship.ship'
+require 'src.ship.ship'
 
 World = { }
 

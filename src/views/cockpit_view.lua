@@ -2,12 +2,12 @@ local cockpit_view = {}
 
 
 -- libs
-local Gamestate = require 'lib.hump.gamestate'
+local Gamestate = require 'src.lib.hump.gamestate'
 
 -- modules
-local space = require 'views.space'
+local space = require 'src.views.space'
 
-require 'utils'
+require 'src.utils'
 
 local keypressed = false
 

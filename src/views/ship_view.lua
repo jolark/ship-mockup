@@ -1,14 +1,14 @@
 local ship_view = { init = false }
 
 -- libs
-local Bump = require 'lib.bump'
-local Camera = require 'lib.hump.camera'
-local LightWorld = require 'lib.light'
+local Bump = require 'src.lib.bump'
+local Camera = require 'src.lib.hump.camera'
+local LightWorld = require 'src.lib.light'
 
 -- modules
-require 'player'
-require 'views.asteroids'
-require 'views.stars'
+require 'src.player'
+require 'src.views.asteroids'
+require 'src.views.stars'
 
 local VIEW_SCALE = 1
 

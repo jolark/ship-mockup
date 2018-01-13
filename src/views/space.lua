@@ -1,4 +1,4 @@
-flux = require 'lib.flux'
+flux = require 'src.lib.flux'
 
 local Space = {}
 
