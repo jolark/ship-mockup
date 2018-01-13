@@ -15,6 +15,8 @@ local engines_view_right = require 'views.engines_view_right'
 local player = Player:new()
 local world = World:new()
 
+
+-- TEST DATA
 local ship = Ship:new()
 ship:addRoom(LobbyRoom:new())
 world.ship = ship
