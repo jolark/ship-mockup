@@ -66,7 +66,7 @@ end
 
 local function initBlock(block)
     bumpWorld:add(block.name, block.x, block.y, block.w, block.h)
-    lightWorld:newRectangle(block.x, block.y, block.w, block.h)
+    lightWorld:newRectangle(block.x + block.w/2, block.y + block.h/2, block.w, block.h)
     -- DEBUG
     table.insert(blocks, block)
 end
@@ -81,6 +81,9 @@ local function initBlocks(ship)
         initBlock({name=room.name .. i .. 'left', x=room.position.x, y=room.position.y, w=10, h=room.size.h * TILE_SIZE})
         -- wall right
         initBlock({name=room.name .. i .. 'right', x=room.position.x + room.size.w * TILE_SIZE - 10, y=room.position.y, w=10, h=room.size.h * TILE_SIZE})
+        for j, item in ipairs(room.items) do
+            initBlock(item.block)
+        end
     end
 end
 

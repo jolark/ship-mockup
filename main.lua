@@ -36,7 +36,7 @@ room:addLight(mainlight)
 ship:addRoom(room)
 world.ship = ship
 
-player:setPosition({x=350, y=350})
+player:setPosition({x=350, y=500})
 
 
 -- TEST STUFF END
