@@ -26,17 +26,20 @@ local world = World:new()
 -- TEST STUFF
 
 local ship = Ship:new()
-local room = ShipRoom:new('room1', 300, 300, 10, 10)
-local engineControl = EngineControl:new(350, 350)
+local room = ShipRoom:new('room1', 10, 10, 10, 10)
+local engineControl = EngineControl:new(12, 11)
 room:addItem(engineControl)
-local cockpit = Cockpit:new(500, 500)
+local cockpit = Cockpit:new(16, 16)
 room:addItem(cockpit)
 local mainlight = { x=400, y=600, r=30, g=100, b=0, range=300, glow=0.5, smooth=1.5 }
 room:addLight(mainlight)
+
+local room2 = ShipRoom:new('room2', 10, 20, 10, 10)
 ship:addRoom(room)
+ship:addRoom(room2)
 world.ship = ship
 
-player:setPosition({x=350, y=500})
+player:setPosition({x=13, y=13})
 
 
 -- TEST STUFF END

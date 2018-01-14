@@ -18,14 +18,15 @@ function ShipItem:new(posx, posy, isActionnable)
     return object
 end
 
+-- FIXME isNear center instead of upleft corner
 function ShipItem:isNear(x, y, dist)
     local dx = self.x - x
     local dy = self.y - y
-    return math.sqrt(dx*dx + dy*dy) < (dist or 100)
+    return math.sqrt(dx*dx + dy*dy) < (dist or 2)
 end
 
 function ShipItem:update(dt, player)
-    self.nearPlayer = self:isNear(player.x, player.y)
+    self.nearPlayer = self:isNear(player.x /  TILE_SIZE, player.y /  TILE_SIZE)
     if self.nearPlayer then
         animationUpdate(self.switchAnimation, dt)
     end
@@ -34,6 +35,6 @@ end
 function ShipItem:draw()
     if self.nearPlayer then
         local spriteNum = math.floor(self.switchAnimation.currentTime / self.switchAnimation.duration * #self.switchAnimation.quads) + 1
-        love.graphics.draw(self.switchAnimation.spriteSheet, self.switchAnimation.quads[spriteNum], self.x, self.y, 0, 1, 1, 20, 20)
+        love.graphics.draw(self.switchAnimation.spriteSheet, self.switchAnimation.quads[spriteNum], self.x * TILE_SIZE, self.y * TILE_SIZE, 0, 1, 1, 20, 20)
     end
 end

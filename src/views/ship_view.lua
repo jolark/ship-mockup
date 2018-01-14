@@ -74,15 +74,15 @@ end
 local function initBlocks(ship)
     for i, room in ipairs(ship.rooms) do
         -- wall up
-        initBlock({name=room.name .. i .. 'up', x=room.position.x, y=room.position.y, w=room.size.w * TILE_SIZE, h=10}) -- 10 = wall size... // FIXME
+        initBlock({name=room.name .. i .. 'up', x=room.position.x * TILE_SIZE, y=room.position.y* TILE_SIZE, w=room.size.w * TILE_SIZE, h=10}) -- 10 = wall size... // FIXME
         -- wall down
-        initBlock({name=room.name .. i .. 'down', x=room.position.x, y=room.position.y + room.size.h * TILE_SIZE - 10, w=room.size.w * TILE_SIZE, h=10})
+        initBlock({name=room.name .. i .. 'down', x=room.position.x * TILE_SIZE, y=(room.position.y + room.size.h) * TILE_SIZE - 10, w=room.size.w * TILE_SIZE, h=10})
         -- wall left
-        initBlock({name=room.name .. i .. 'left', x=room.position.x, y=room.position.y, w=10, h=room.size.h * TILE_SIZE})
+        initBlock({name=room.name .. i .. 'left', x=room.position.x * TILE_SIZE, y=room.position.y * TILE_SIZE, w=10, h=room.size.h * TILE_SIZE})
         -- wall right
-        initBlock({name=room.name .. i .. 'right', x=room.position.x + room.size.w * TILE_SIZE - 10, y=room.position.y, w=10, h=room.size.h * TILE_SIZE})
+        initBlock({name=room.name .. i .. 'right', x=(room.position.x + room.size.w) * TILE_SIZE - 10, y=room.position.y * TILE_SIZE, w=10, h=room.size.h * TILE_SIZE})
         for j, item in ipairs(room.items) do
-            initBlock(item.block)
+            initBlock({name=item.block.name, x=item.block.x * TILE_SIZE, y=item.block.y * TILE_SIZE, w=item.block.w, h=item.block.h})
         end
     end
 end

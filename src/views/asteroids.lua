@@ -29,7 +29,7 @@ end
 
 local function onShip(asteroid, ship)
     for _, room in ipairs(ship.rooms) do
-        local rect = { { x = room.position.x, y = room.position.y}, { x = room.position.x + room.size.w  * TILE_SIZE, y = room.position.y }, { x = room.position.x, y = room.position.y + room.size.h * TILE_SIZE } }
+        local rect = { { x = room.position.x * TILE_SIZE, y = room.position.y * TILE_SIZE}, { x = (room.position.x + room.size.w) * TILE_SIZE, y = room.position.y * TILE_SIZE }, { x = room.position.x * TILE_SIZE, y = (room.position.y + room.size.h) * TILE_SIZE } }
         if pointInRectangle(asteroid, rect) then
             return true
         end

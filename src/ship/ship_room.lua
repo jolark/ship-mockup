@@ -12,7 +12,8 @@ function ShipRoom:new(name, xpos, ypos, width, height, someaccess, somelights)
         access = someaccess or {up=false, down=false, right=false, left=false},
 		fakeLights = somelights or {},
         realLights = {},
-        items = {}
+        items = {},
+        doors = {}
 	}
 	setmetatable(object, { __index = ShipRoom })
 	return object
@@ -49,28 +50,27 @@ function ShipRoom:lightsOff()
 	end
 end
 
-
 function ShipRoom:drawWalls()
     for i=1,self.size.w do
         for j=1,self.size.h do
             if i == 1 and j == 1 then -- upleft corner
-                love.graphics.draw(cornerTile, self.position.x + TILE_SIZE * (i - 1), self.position.y + TILE_SIZE * (j - 1))
+                love.graphics.draw(cornerTile, TILE_SIZE * self.position.x + TILE_SIZE * (i - 1), TILE_SIZE * self.position.y + TILE_SIZE * (j - 1))
             elseif i == 1 and j == self.size.h then -- downleft corner
-                love.graphics.draw(cornerTile, self.position.x + TILE_SIZE * (i - 1), self.position.y + TILE_SIZE * (j - 1), 0, 1, -1, 0, TILE_SIZE)
+                love.graphics.draw(cornerTile, TILE_SIZE * self.position.x + TILE_SIZE * (i - 1), TILE_SIZE * self.position.y + TILE_SIZE * (j - 1), 0, 1, -1, 0, TILE_SIZE)
             elseif i == self.size.w and j == 1 then -- upright corner
-                love.graphics.draw(cornerTile, self.position.x + TILE_SIZE * (i - 1), self.position.y + TILE_SIZE * (j - 1), 0, -1, 1, TILE_SIZE)
+                love.graphics.draw(cornerTile, TILE_SIZE * self.position.x + TILE_SIZE * (i - 1), TILE_SIZE * self.position.y + TILE_SIZE * (j - 1), 0, -1, 1, TILE_SIZE)
             elseif i == self.size.w and j == self.size.h then -- downright corner
-                love.graphics.draw(cornerTile, self.position.x + TILE_SIZE * (i - 1), self.position.y + TILE_SIZE * (j - 1), 0, -1, -1, TILE_SIZE, TILE_SIZE)
+                love.graphics.draw(cornerTile, TILE_SIZE * self.position.x + TILE_SIZE * (i - 1), TILE_SIZE * self.position.y + TILE_SIZE * (j - 1), 0, -1, -1, TILE_SIZE, TILE_SIZE)
             elseif i % self.size.w == 1 then -- wall left
-                love.graphics.draw(wallTile, self.position.x + TILE_SIZE * (i - 1), self.position.y + TILE_SIZE * (j - 1), -math.pi/2, 1, 1, TILE_SIZE)
+                love.graphics.draw(wallTile, TILE_SIZE * self.position.x + TILE_SIZE * (i - 1), TILE_SIZE * self.position.y + TILE_SIZE * (j - 1), -math.pi/2, 1, 1, TILE_SIZE)
             elseif i == self.size.w then -- wall right
-                love.graphics.draw(wallTile, self.position.x + TILE_SIZE * (i - 1), self.position.y + TILE_SIZE * (j - 1), math.pi/2, 1, 1, 0, TILE_SIZE)
+                love.graphics.draw(wallTile, TILE_SIZE * self.position.x + TILE_SIZE * (i - 1), TILE_SIZE * self.position.y + TILE_SIZE * (j - 1), math.pi/2, 1, 1, 0, TILE_SIZE)
             elseif j == 1 then -- wall up
-                love.graphics.draw(wallTile, self.position.x + TILE_SIZE * (i - 1), self.position.y + TILE_SIZE * (j - 1))
+                love.graphics.draw(wallTile, TILE_SIZE * self.position.x + TILE_SIZE * (i - 1), TILE_SIZE * self.position.y + TILE_SIZE * (j - 1))
             elseif j == self.size.h then -- wall down
-                love.graphics.draw(wallTile, self.position.x + TILE_SIZE * (i - 1), self.position.y + TILE_SIZE * (j - 1), 0, 1, -1, 0, TILE_SIZE)
+                love.graphics.draw(wallTile, TILE_SIZE * self.position.x + TILE_SIZE * (i - 1), TILE_SIZE * self.position.y + TILE_SIZE * (j - 1), 0, 1, -1, 0, TILE_SIZE)
             else
-                love.graphics.draw(floorTile, self.position.x + TILE_SIZE * (i - 1), self.position.y + TILE_SIZE * (j - 1))
+                love.graphics.draw(floorTile, TILE_SIZE * self.position.x + TILE_SIZE * (i - 1), TILE_SIZE * self.position.y + TILE_SIZE * (j - 1))
             end
         end
     end

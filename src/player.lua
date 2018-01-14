@@ -30,8 +30,8 @@ function Player:new()
 end
 
 function Player:setPosition(position)
-    self.x = position.x
-    self.y = position.y
+    self.x = position.x * TILE_SIZE
+    self.y = position.y * TILE_SIZE
 end
 
 -- LÖVE functions
@@ -70,7 +70,7 @@ function Player:update(bumpworld, dt)
 
 	-- animation sprite
 	if dx ~= 0 or dy ~= 0 then
-		local cols
+		local cols, cols_len
 		self.x, self.y, cols, cols_len = bumpworld:move(self, self.x + dx, self.y + dy)
 		animationUpdate(self.charAnimation, dt)
 	else

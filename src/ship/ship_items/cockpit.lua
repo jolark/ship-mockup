@@ -22,5 +22,5 @@ end
 
 function Cockpit:draw()
     ShipItem.draw(self)
-    love.graphics.draw(image, self.x, self.y)
+    love.graphics.draw(image, self.x * TILE_SIZE, self.y * TILE_SIZE)
 end
