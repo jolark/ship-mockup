@@ -29,14 +29,17 @@ local ship = Ship:new()
 local room = ShipRoom:new('room1', 10, 10, 10, 10)
 local engineControl = EngineControl:new(12, 11)
 room:addItem(engineControl)
-local cockpit = Cockpit:new(16, 16)
+local cockpit = Cockpit:new(18, 16)
 room:addItem(cockpit)
 local mainlight = { x=400, y=600, r=30, g=100, b=0, range=300, glow=0.5, smooth=1.5 }
 room:addLight(mainlight)
-
-local room2 = ShipRoom:new('room2', 10, 20, 10, 10)
 ship:addRoom(room)
-ship:addRoom(room2)
+
+ship:addRoom(ShipRoom:new('room2', 15, 20, 15, 5))
+ship:addRoom(ShipRoom:new('room3', 20, 10, 10, 5))
+ship:addRoom(ShipRoom:new('room4', 0, 11, 10, 5))
+ship:addRoom(ShipRoom:new('room5', 4, 5, 10, 5))
+
 world.ship = ship
 
 player:setPosition({x=13, y=13})
