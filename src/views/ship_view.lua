@@ -101,9 +101,9 @@ local function initBlocks(ship)
         else
             initBlock({name=room.name .. i .. 'right', x=(room.position.x + room.size.w) * TILE_SIZE - 10, y=room.position.y * TILE_SIZE, w=10, h=room.size.h * TILE_SIZE})
         end
-        for j, item in ipairs(room.items) do
-            initBlock({name=item.block.name, x=item.block.x * TILE_SIZE, y=item.block.y * TILE_SIZE, w=item.block.w, h=item.block.h})
-        end
+    end
+    for j, item in ipairs(ship.items) do
+        initBlock({name=item.block.name, x=item.block.x * TILE_SIZE, y=item.block.y * TILE_SIZE, w=item.block.w, h=item.block.h})
     end
 end
 

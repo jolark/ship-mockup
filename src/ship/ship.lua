@@ -6,6 +6,7 @@ Ship = {}
 function Ship:new()
     local object = {
         rooms = {},
+        items = {},
         speed = 1,
         fuelLevel = 100,
         engineLeftBreak = false,
@@ -18,6 +19,10 @@ end
 function Ship:addRoom(shipRoom)
     table.insert(self.rooms, shipRoom)
     self:addDoors(self.rooms[#self.rooms]) -- or shipRoom ? FIXME
+end
+
+function Ship:addItem(shipItem)
+    table.insert(self.items, shipItem)
 end
 
 -- return relative common offsets
@@ -94,11 +99,17 @@ function Ship:update(dt, player, colliding)
     for _, room in ipairs(self.rooms) do
         room:update(dt, player)
     end
+    for _,item in ipairs(self.items) do
+        item:update(dt, player)
+    end
     --    self:randomlyBreakEngines(colliding)
 end
 
 function Ship:draw()
     for _, room in ipairs(self.rooms) do
         room:draw()
+    end
+    for _,item in ipairs(self.items) do
+        item:draw()
     end
 end

@@ -11,7 +11,6 @@ function ShipRoom:new(name, xpos, ypos, width, height, somelights)
         size = {w=width, h=height} or {w=0, h=0},
 		fakeLights = somelights or {},
         realLights = {},
-        items = {},
         doors = {up=0, down=0, right=0, left=0},
 	}
 	setmetatable(object, { __index = ShipRoom })
@@ -31,10 +30,6 @@ function ShipRoom:activateLights(lightworld)
         lite:setSmooth(light.smooth)
         table.insert(self.realLights, lite)
     end
-end
-
-function ShipRoom:addItem(shipItem)
-    table.insert(self.items, shipItem)
 end
 
 function ShipRoom:lightsOn()
@@ -93,14 +88,9 @@ end
 
 
 function ShipRoom:update(dt, player)
-    for _,item in ipairs(self.items) do
-        item:update(dt, player)
-    end
+
 end
 
 function ShipRoom:draw()
 	self:drawWalls()
-    for _,item in ipairs(self.items) do
-        item:draw()
-    end
 end

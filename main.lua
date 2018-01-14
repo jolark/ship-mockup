@@ -26,11 +26,10 @@ local world = World:new()
 -- TEST STUFF
 
 local ship = Ship:new()
+ship:addItem(EngineControl:new(12, 11))
+ship:addItem(Cockpit:new(28, 11))
+
 local room = ShipRoom:new('room1', 10, 10, 10, 10)
-local engineControl = EngineControl:new(12, 11)
-room:addItem(engineControl)
-local cockpit = Cockpit:new(18, 16)
-room:addItem(cockpit)
 local mainlight = { x=400, y=600, r=30, g=100, b=0, range=300, glow=0.5, smooth=1.5 }
 room:addLight(mainlight)
 ship:addRoom(room)
