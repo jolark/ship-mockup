@@ -27,19 +27,20 @@ local stars = {}
 
 -- DEBUG TOOLS
 local blocks = {}
-local function drawBox(box, r,g,b)
-    love.graphics.setColor(r,g,b,70)
+local function drawBox(box, r, g, b)
+    love.graphics.setColor(r, g, b, 70)
     love.graphics.rectangle("fill", box.x, box.y, box.w, box.h)
-    love.graphics.setColor(r,g,b)
+    love.graphics.setColor(r, g, b)
     love.graphics.rectangle("line", box.x, box.y, box.w, box.h)
 end
 
 local function drawBlocks()
-    for _,block in ipairs(blocks) do
-        drawBox(block, 255,0,0)
+    for _, block in ipairs(blocks) do
+        drawBox(block, 255, 0, 0)
     end
-    love.graphics.setColor(255,255,255)
+    love.graphics.setColor(255, 255, 255)
 end
+
 -- DEBUG TOOLS END
 
 -- Sounds
@@ -59,22 +60,47 @@ end
 
 
 local function initLights(ship)
-    for _,room in ipairs(ship.rooms) do
+    for _, room in ipairs(ship.rooms) do
         room:activateLights(lightWorld)
     end
 end
 
 local function initBlock(block)
     bumpWorld:add(block.name, block.x, block.y, block.w, block.h)
-    lightWorld:newRectangle(block.x + block.w/2, block.y + block.h/2, block.w, block.h)
+    lightWorld:newRectangle(block.x + block.w / 2, block.y + block.h / 2, block.w, block.h)
     -- DEBUG
     table.insert(blocks, block)
 end
 
-local function initBlocks(ship)
+local function wallPositionUpdate(room, direction, door)
+    if direction == 'up' then
+        return {x=room.position.x + door, y=room.position.y }
+    elseif direction == 'down' then
+        return {x=room.position.x + door, y=room.position.y + room.size.h }
+    elseif direction == 'left' then
+        return {x=room.position.x, y=room.position.y + door}
+    elseif direction == 'right' then
+        return {x=room.position.x + room.size.w, y=room.position.y + door }
+    end
+end
+
+local function initWallsBlocks(ship)
     for i, room in ipairs(ship.rooms) do
-        -- wall up
-        print(room.doors['up'])
+        for j, dir in ipairs { 'up', 'down' } do
+            -- wall up
+            print(room.doors['up'])
+            if #room.doors[dir] > 0 then
+                local currentPos = wallPositionUpdate(room, dir, 0)
+                for k, door in room.doors do
+                    initBlock({ name = room.name .. i .. dir .. k, x = currentPos.x * TILE_SIZE, y = currentPos.y * TILE_SIZE, w = (door - 1) * TILE_SIZE, h = 10 })
+                    --                initBlock({name=room.name .. i .. 'up2', x=(room.position.x + room.doors.up) * TILE_SIZE, y=room.position.y* TILE_SIZE, w=(room.size.w - room.doors.up) * TILE_SIZE, h=10})
+                    currentPos = wallPositionUpdate(room, dir, door)
+                end
+            else
+                initBlock({ name = room.name .. i .. 'up', x = room.position.x * TILE_SIZE, y = room.position.y * TILE_SIZE, w = room.size.w * TILE_SIZE, h = 10 }) -- 10 = wall size... // FIXME
+            end
+        end
+
         -- if room.doors.up ~= 0 then
         --     initBlock({name=room.name .. i .. 'up1', x=room.position.x * TILE_SIZE, y=room.position.y* TILE_SIZE, w=(room.doors.up - 1) * TILE_SIZE, h=10})
         --     initBlock({name=room.name .. i .. 'up2', x=(room.position.x + room.doors.up) * TILE_SIZE, y=room.position.y* TILE_SIZE, w=(room.size.w - room.doors.up) * TILE_SIZE, h=10})
@@ -103,8 +129,11 @@ local function initBlocks(ship)
         --     initBlock({name=room.name .. i .. 'right', x=(room.position.x + room.size.w) * TILE_SIZE - 10, y=room.position.y * TILE_SIZE, w=10, h=room.size.h * TILE_SIZE})
         -- end
     end
+end
+
+local function initItemsBlocks(ship)
     for j, item in ipairs(ship.items) do
-        initBlock({name=item.block.name, x=item.block.x * TILE_SIZE, y=item.block.y * TILE_SIZE, w=item.block.w, h=item.block.h})
+        initBlock({ name = item.block.name, x = item.block.x * TILE_SIZE, y = item.block.y * TILE_SIZE, w = item.block.w, h = item.block.h })
     end
 end
 
@@ -142,7 +171,7 @@ function ship_view:update(dt)
     local colliding = updateAsteroids(asteroids, ship_view.world.ship)
     ship_view.world:update(dt, ship_view.player, colliding)
     updateCamera(ship_view.player)
-     lightWorld:update(dt)
+    lightWorld:update(dt)
     playSounds()
 end
 
