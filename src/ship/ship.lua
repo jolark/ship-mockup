@@ -40,11 +40,13 @@ function Ship:addDoors(room)
         if room.name ~= otherRoom.name then
             -- adjacent up
             if room.position.y == otherRoom.position.y + otherRoom.size.h then
+                -- FIXME factorize this
                 local commonWalls = commonOffsets({ x1 = room.position.x, x2 = room.position.x + room.size.w },
                     { x1 = otherRoom.position.x, x2 = otherRoom.position.x + otherRoom.size.w })
                 if commonWalls then
-                    room.doors.up = math.random(commonWalls[1], commonWalls[2])
-                    otherRoom.doors.down = room.doors.up + (room.position.x - otherRoom.position.x)
+                    local newDoor = math.random(commonWalls[1], commonWalls[2])
+                    table.insert(room.doors.up, newDoor)
+                    table.insert(otherRoom.doors.down, newDoor + (room.position.x - otherRoom.position.x))
                 end
             end
             -- adjacent down
@@ -52,8 +54,9 @@ function Ship:addDoors(room)
                 local commonWalls = commonOffsets({ x1 = room.position.x, x2 = room.position.x + room.size.w },
                     { x1 = otherRoom.position.x, x2 = otherRoom.position.x + otherRoom.size.w })
                 if commonWalls then
-                    room.doors.down = math.random(commonWalls[1], commonWalls[2])
-                    otherRoom.doors.up = room.doors.down + (room.position.x - otherRoom.position.x)
+                    local newDoor = math.random(commonWalls[1], commonWalls[2])
+                    table.insert(room.doors.down, newDoor)
+                    table.insert(otherRoom.doors.up, newDoor + (room.position.x - otherRoom.position.x))
                 end
             end
             -- adjacent left
@@ -61,8 +64,9 @@ function Ship:addDoors(room)
                 local commonWalls = commonOffsets({ x1 = room.position.y, x2 = room.position.y + room.size.h },
                     { x1 = otherRoom.position.y, x2 = otherRoom.position.y + otherRoom.size.h })
                 if commonWalls then
-                    room.doors.left = math.random(commonWalls[1], commonWalls[2])
-                    otherRoom.doors.right = room.doors.left + (room.position.y - otherRoom.position.y)
+                    local newDoor = math.random(commonWalls[1], commonWalls[2])
+                    table.insert(room.doors.left, newDoor)
+                    table.insert(otherRoom.doors.right, newDoor + (room.position.y - otherRoom.position.y))
                 end
             end
             -- adjacent right
@@ -70,8 +74,9 @@ function Ship:addDoors(room)
                 local commonWalls = commonOffsets({ x1 = room.position.y, x2 = room.position.y + room.size.h },
                     { x1 = otherRoom.position.y, x2 = otherRoom.position.y + otherRoom.size.h })
                 if commonWalls then
-                    room.doors.right = math.random(commonWalls[1], commonWalls[2])
-                    otherRoom.doors.left = room.doors.right + (room.position.y - otherRoom.position.y)
+                    local newDoor = math.random(commonWalls[1], commonWalls[2])
+                    table.insert(room.doors.right, newDoor)
+                    table.insert(otherRoom.doors.left, newDoor + (room.position.y - otherRoom.position.y))
                 end
             end
         end

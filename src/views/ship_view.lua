@@ -74,33 +74,34 @@ end
 local function initBlocks(ship)
     for i, room in ipairs(ship.rooms) do
         -- wall up
-        if room.doors.up ~= 0 then
-            initBlock({name=room.name .. i .. 'up1', x=room.position.x * TILE_SIZE, y=room.position.y* TILE_SIZE, w=(room.doors.up - 1) * TILE_SIZE, h=10})
-            initBlock({name=room.name .. i .. 'up2', x=(room.position.x + room.doors.up) * TILE_SIZE, y=room.position.y* TILE_SIZE, w=(room.size.w - room.doors.up) * TILE_SIZE, h=10})
-        else
-            initBlock({name=room.name .. i .. 'up', x=room.position.x * TILE_SIZE, y=room.position.y* TILE_SIZE, w=room.size.w * TILE_SIZE, h=10}) -- 10 = wall size... // FIXME
-        end
-        -- wall down
-        if room.doors.down ~= 0 then
-            initBlock({name=room.name .. i .. 'down1', x=room.position.x * TILE_SIZE, y=(room.position.y + room.size.h) * TILE_SIZE - 10, w=(room.doors.down - 1) * TILE_SIZE, h=10})
-            initBlock({name=room.name .. i .. 'down2', x=(room.position.x + room.doors.down) * TILE_SIZE, y=(room.position.y + room.size.h) * TILE_SIZE - 10, w=(room.size.w - room.doors.down) * TILE_SIZE, h=10})
-        else
-            initBlock({name=room.name .. i .. 'down', x=room.position.x * TILE_SIZE, y=(room.position.y + room.size.h) * TILE_SIZE - 10, w=room.size.w * TILE_SIZE, h=10})
-        end
-        -- wall left
-        if room.doors.left ~= 0 then
-            initBlock({name=room.name .. i .. 'left1', x=room.position.x * TILE_SIZE, y=room.position.y * TILE_SIZE, w=10, h=(room.doors.left - 1) * TILE_SIZE})
-            initBlock({name=room.name .. i .. 'left2', x=room.position.x * TILE_SIZE, y=(room.position.y + room.doors.left) * TILE_SIZE, w=10, h=(room.size.h - room.doors.left) * TILE_SIZE})
-        else
-            initBlock({name=room.name .. i .. 'left', x=room.position.x * TILE_SIZE, y=room.position.y * TILE_SIZE, w=10, h=room.size.h * TILE_SIZE})
-        end
-        -- wall right
-        if room.doors.right ~= 0 then
-            initBlock({name=room.name .. i .. 'right1', x=(room.position.x + room.size.w) * TILE_SIZE - 10, y=room.position.y * TILE_SIZE, w=10, h=(room.doors.right - 1) * TILE_SIZE})
-            initBlock({name=room.name .. i .. 'right2', x=(room.position.x + room.size.w) * TILE_SIZE - 10, y=(room.position.y + room.doors.right) * TILE_SIZE, w=10, h=(room.size.h - room.doors.right) * TILE_SIZE})
-        else
-            initBlock({name=room.name .. i .. 'right', x=(room.position.x + room.size.w) * TILE_SIZE - 10, y=room.position.y * TILE_SIZE, w=10, h=room.size.h * TILE_SIZE})
-        end
+        print(room.doors['up'])
+        -- if room.doors.up ~= 0 then
+        --     initBlock({name=room.name .. i .. 'up1', x=room.position.x * TILE_SIZE, y=room.position.y* TILE_SIZE, w=(room.doors.up - 1) * TILE_SIZE, h=10})
+        --     initBlock({name=room.name .. i .. 'up2', x=(room.position.x + room.doors.up) * TILE_SIZE, y=room.position.y* TILE_SIZE, w=(room.size.w - room.doors.up) * TILE_SIZE, h=10})
+        -- else
+        --     initBlock({name=room.name .. i .. 'up', x=room.position.x * TILE_SIZE, y=room.position.y* TILE_SIZE, w=room.size.w * TILE_SIZE, h=10}) -- 10 = wall size... // FIXME
+        -- end
+        -- -- wall down
+        -- if room.doors.down ~= 0 then
+        --     initBlock({name=room.name .. i .. 'down1', x=room.position.x * TILE_SIZE, y=(room.position.y + room.size.h) * TILE_SIZE - 10, w=(room.doors.down - 1) * TILE_SIZE, h=10})
+        --     initBlock({name=room.name .. i .. 'down2', x=(room.position.x + room.doors.down) * TILE_SIZE, y=(room.position.y + room.size.h) * TILE_SIZE - 10, w=(room.size.w - room.doors.down) * TILE_SIZE, h=10})
+        -- else
+        --     initBlock({name=room.name .. i .. 'down', x=room.position.x * TILE_SIZE, y=(room.position.y + room.size.h) * TILE_SIZE - 10, w=room.size.w * TILE_SIZE, h=10})
+        -- end
+        -- -- wall left
+        -- if room.doors.left ~= 0 then
+        --     initBlock({name=room.name .. i .. 'left1', x=room.position.x * TILE_SIZE, y=room.position.y * TILE_SIZE, w=10, h=(room.doors.left - 1) * TILE_SIZE})
+        --     initBlock({name=room.name .. i .. 'left2', x=room.position.x * TILE_SIZE, y=(room.position.y + room.doors.left) * TILE_SIZE, w=10, h=(room.size.h - room.doors.left) * TILE_SIZE})
+        -- else
+        --     initBlock({name=room.name .. i .. 'left', x=room.position.x * TILE_SIZE, y=room.position.y * TILE_SIZE, w=10, h=room.size.h * TILE_SIZE})
+        -- end
+        -- -- wall right
+        -- if room.doors.right ~= 0 then
+        --     initBlock({name=room.name .. i .. 'right1', x=(room.position.x + room.size.w) * TILE_SIZE - 10, y=room.position.y * TILE_SIZE, w=10, h=(room.doors.right - 1) * TILE_SIZE})
+        --     initBlock({name=room.name .. i .. 'right2', x=(room.position.x + room.size.w) * TILE_SIZE - 10, y=(room.position.y + room.doors.right) * TILE_SIZE, w=10, h=(room.size.h - room.doors.right) * TILE_SIZE})
+        -- else
+        --     initBlock({name=room.name .. i .. 'right', x=(room.position.x + room.size.w) * TILE_SIZE - 10, y=room.position.y * TILE_SIZE, w=10, h=room.size.h * TILE_SIZE})
+        -- end
     end
     for j, item in ipairs(ship.items) do
         initBlock({name=item.block.name, x=item.block.x * TILE_SIZE, y=item.block.y * TILE_SIZE, w=item.block.w, h=item.block.h})

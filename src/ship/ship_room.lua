@@ -1,3 +1,5 @@
+require 'src.utils'
+
 ShipRoom = {}
 
 local floorTile = love.graphics.newImage('img/floor-tile.png')
@@ -11,7 +13,7 @@ function ShipRoom:new(name, xpos, ypos, width, height, somelights)
         size = {w=width, h=height} or {w=0, h=0},
 		fakeLights = somelights or {},
         realLights = {},
-        doors = {up=0, down=0, right=0, left=0},
+        doors = {up={}, down={}, right={}, left={}},
 	}
 	setmetatable(object, { __index = ShipRoom })
 	return object
@@ -56,25 +58,25 @@ function ShipRoom:drawWalls()
             elseif i == self.size.w and j == self.size.h then -- downright corner
                 love.graphics.draw(cornerTile, TILE_SIZE * self.position.x + TILE_SIZE * (i - 1), TILE_SIZE * self.position.y + TILE_SIZE * (j - 1), 0, -1, -1, TILE_SIZE, TILE_SIZE)
             elseif i % self.size.w == 1 then -- wall left
-                if j == self.doors.left then
+                if inTable(self.doors.left, j) then
                     love.graphics.draw(floorTile, TILE_SIZE * self.position.x + TILE_SIZE * (i - 1), TILE_SIZE * self.position.y + TILE_SIZE * (j - 1))
                 else
                     love.graphics.draw(wallTile, TILE_SIZE * self.position.x + TILE_SIZE * (i - 1), TILE_SIZE * self.position.y + TILE_SIZE * (j - 1), -math.pi/2, 1, 1, TILE_SIZE)
                 end
             elseif i == self.size.w then -- wall right
-                if j == self.doors.right then
+                if inTable(self.doors.right, j) then
                     love.graphics.draw(floorTile, TILE_SIZE * self.position.x + TILE_SIZE * (i - 1), TILE_SIZE * self.position.y + TILE_SIZE * (j - 1))
                 else
                     love.graphics.draw(wallTile, TILE_SIZE * self.position.x + TILE_SIZE * (i - 1), TILE_SIZE * self.position.y + TILE_SIZE * (j - 1), math.pi/2, 1, 1, 0, TILE_SIZE)
                 end
             elseif j == 1 then -- wall up
-                if i == self.doors.up then
+                if inTable(self.doors.up, i) then
                     love.graphics.draw(floorTile, TILE_SIZE * self.position.x + TILE_SIZE * (i - 1), TILE_SIZE * self.position.y + TILE_SIZE * (j - 1))
                 else
                     love.graphics.draw(wallTile, TILE_SIZE * self.position.x + TILE_SIZE * (i - 1), TILE_SIZE * self.position.y + TILE_SIZE * (j - 1))
                 end
             elseif j == self.size.h then -- wall down
-                if i == self.doors.down then
+                if inTable(self.doors.down, i) then
                     love.graphics.draw(floorTile, TILE_SIZE * self.position.x + TILE_SIZE * (i - 1), TILE_SIZE * self.position.y + TILE_SIZE * (j - 1))
                 else
                     love.graphics.draw(wallTile, TILE_SIZE * self.position.x + TILE_SIZE * (i - 1), TILE_SIZE * self.position.y + TILE_SIZE * (j - 1), 0, 1, -1, 0, TILE_SIZE)
