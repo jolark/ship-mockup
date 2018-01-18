@@ -34,10 +34,12 @@ local mainlight = { x=400, y=600, r=30, g=100, b=0, range=300, glow=0.5, smooth=
 room:addLight(mainlight)
 ship:addRoom(room)
 
-ship:addRoom(ShipRoom:new('room2', 15, 20, 15, 5))
+-- ship:addRoom(ShipRoom:new('room2', 14, 20, 15, 5))
 ship:addRoom(ShipRoom:new('room3', 20, 10, 10, 5))
 ship:addRoom(ShipRoom:new('room4', 0, 11, 10, 5))
 ship:addRoom(ShipRoom:new('room5', 4, 5, 10, 5))
+ship:addRoom(ShipRoom:new('room6', 20, 15, 10, 5))
+-- ship:addRoom(ShipRoom:new('room7', 0, 16, 10, 5))
 
 world.ship = ship
 

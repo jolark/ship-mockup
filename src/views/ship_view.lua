@@ -74,60 +74,43 @@ end
 
 local function wallPositionUpdate(room, direction, door)
     if direction == 'up' then
-        return {x=room.position.x + door, y=room.position.y }
+        return {x=(room.position.x + door) * TILE_SIZE, y=room.position.y * TILE_SIZE}
     elseif direction == 'down' then
-        return {x=room.position.x + door, y=room.position.y + room.size.h }
+        return {x=(room.position.x + door) * TILE_SIZE, y=(room.position.y + room.size.h) * TILE_SIZE - 10}
     elseif direction == 'left' then
-        return {x=room.position.x, y=room.position.y + door}
+        return {x=room.position.x * TILE_SIZE, y=(room.position.y + door) * TILE_SIZE}
     elseif direction == 'right' then
-        return {x=room.position.x + room.size.w, y=room.position.y + door }
+        return {x=(room.position.x + room.size.w) * TILE_SIZE - 10, y=(room.position.y + door) * TILE_SIZE }
     end
 end
 
 local function initWallsBlocks(ship)
+    -- 10 = fixed wall size... // FIXME
     for i, room in ipairs(ship.rooms) do
-        for j, dir in ipairs { 'up', 'down' } do
-            -- wall up
-            print(room.doors['up'])
-            if #room.doors[dir] > 0 then
-                local currentPos = wallPositionUpdate(room, dir, 0)
-                for k, door in room.doors do
-                    initBlock({ name = room.name .. i .. dir .. k, x = currentPos.x * TILE_SIZE, y = currentPos.y * TILE_SIZE, w = (door - 1) * TILE_SIZE, h = 10 })
-                    --                initBlock({name=room.name .. i .. 'up2', x=(room.position.x + room.doors.up) * TILE_SIZE, y=room.position.y* TILE_SIZE, w=(room.size.w - room.doors.up) * TILE_SIZE, h=10})
-                    currentPos = wallPositionUpdate(room, dir, door)
-                end
-            else
-                initBlock({ name = room.name .. i .. 'up', x = room.position.x * TILE_SIZE, y = room.position.y * TILE_SIZE, w = room.size.w * TILE_SIZE, h = 10 }) -- 10 = wall size... // FIXME
+        for j, dir in ipairs({ 'up', 'down', 'left', 'right' }) do
+            local dirIsUpOrDown = (dir == 'up' or dir == 'down')
+            local currentPos = wallPositionUpdate(room, dir, 0)
+            local toomuchwall = 0
+            for k, door in ipairs(room.doors[dir]) do
+                print(room.name, dir, door)
+                initBlock({ 
+                    name = room.name .. i .. dir .. k, 
+                    x = currentPos.x, 
+                    y = currentPos.y, 
+                    w = dirIsUpOrDown and (door - 1) * TILE_SIZE or 10, 
+                    h = dirIsUpOrDown and 10 or (door - 1) * TILE_SIZE 
+                    })
+                currentPos = wallPositionUpdate(room, dir, door)
+                toomuchwall = door
             end
+            initBlock({
+                name = room.name .. i .. dir, 
+                x = currentPos.x, 
+                y = currentPos.y,
+                w = dirIsUpOrDown and (room.size.w - toomuchwall) * TILE_SIZE or 10, 
+                h = dirIsUpOrDown and 10 or (room.size.h - toomuchwall) * TILE_SIZE 
+                })
         end
-
-        -- if room.doors.up ~= 0 then
-        --     initBlock({name=room.name .. i .. 'up1', x=room.position.x * TILE_SIZE, y=room.position.y* TILE_SIZE, w=(room.doors.up - 1) * TILE_SIZE, h=10})
-        --     initBlock({name=room.name .. i .. 'up2', x=(room.position.x + room.doors.up) * TILE_SIZE, y=room.position.y* TILE_SIZE, w=(room.size.w - room.doors.up) * TILE_SIZE, h=10})
-        -- else
-        --     initBlock({name=room.name .. i .. 'up', x=room.position.x * TILE_SIZE, y=room.position.y* TILE_SIZE, w=room.size.w * TILE_SIZE, h=10}) -- 10 = wall size... // FIXME
-        -- end
-        -- -- wall down
-        -- if room.doors.down ~= 0 then
-        --     initBlock({name=room.name .. i .. 'down1', x=room.position.x * TILE_SIZE, y=(room.position.y + room.size.h) * TILE_SIZE - 10, w=(room.doors.down - 1) * TILE_SIZE, h=10})
-        --     initBlock({name=room.name .. i .. 'down2', x=(room.position.x + room.doors.down) * TILE_SIZE, y=(room.position.y + room.size.h) * TILE_SIZE - 10, w=(room.size.w - room.doors.down) * TILE_SIZE, h=10})
-        -- else
-        --     initBlock({name=room.name .. i .. 'down', x=room.position.x * TILE_SIZE, y=(room.position.y + room.size.h) * TILE_SIZE - 10, w=room.size.w * TILE_SIZE, h=10})
-        -- end
-        -- -- wall left
-        -- if room.doors.left ~= 0 then
-        --     initBlock({name=room.name .. i .. 'left1', x=room.position.x * TILE_SIZE, y=room.position.y * TILE_SIZE, w=10, h=(room.doors.left - 1) * TILE_SIZE})
-        --     initBlock({name=room.name .. i .. 'left2', x=room.position.x * TILE_SIZE, y=(room.position.y + room.doors.left) * TILE_SIZE, w=10, h=(room.size.h - room.doors.left) * TILE_SIZE})
-        -- else
-        --     initBlock({name=room.name .. i .. 'left', x=room.position.x * TILE_SIZE, y=room.position.y * TILE_SIZE, w=10, h=room.size.h * TILE_SIZE})
-        -- end
-        -- -- wall right
-        -- if room.doors.right ~= 0 then
-        --     initBlock({name=room.name .. i .. 'right1', x=(room.position.x + room.size.w) * TILE_SIZE - 10, y=room.position.y * TILE_SIZE, w=10, h=(room.doors.right - 1) * TILE_SIZE})
-        --     initBlock({name=room.name .. i .. 'right2', x=(room.position.x + room.size.w) * TILE_SIZE - 10, y=(room.position.y + room.doors.right) * TILE_SIZE, w=10, h=(room.size.h - room.doors.right) * TILE_SIZE})
-        -- else
-        --     initBlock({name=room.name .. i .. 'right', x=(room.position.x + room.size.w) * TILE_SIZE - 10, y=room.position.y * TILE_SIZE, w=10, h=room.size.h * TILE_SIZE})
-        -- end
     end
 end
 
@@ -150,7 +133,8 @@ function ship_view:load()
     -- stars
     initStars(stars)
     -- blocks
-    initBlocks(ship_view.world.ship)
+    -- initWallsBlocks(ship_view.world.ship)
+    initItemsBlocks(ship_view.world.ship)
     -- camera
     camera = Camera(ship_view.player.x, ship_view.player.y)
     camera:zoom(VIEW_SCALE)
