@@ -41,6 +41,7 @@ ship:addRoom(ShipRoom:new('room5', 4, 5, 10, 5))
 ship:addRoom(ShipRoom:new('room6', 20, 15, 10, 5))
 ship:addRoom(ShipRoom:new('room7', 14, 5, 5, 5))
 ship:addRoom(ShipRoom:new('room8', 27, 0, 5, 5))
+ship:addRoom(ShipRoom:new('room9', 27, 5, 3, 5))
 
 world.ship = ship
 

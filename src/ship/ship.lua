@@ -19,7 +19,10 @@ end
 function Ship:addRoom(shipRoom)
     table.insert(self.rooms, shipRoom)
     self:addDoors(shipRoom)
-    shipRoom:addLight({ x=(shipRoom.position.x + shipRoom.size.w / 2) * TILE_SIZE, y=shipRoom.position.y * TILE_SIZE + 10, r=30, g=100, b=0, range=300, glow=0.5, smooth=1.5 })
+    shipRoom:addLight({
+        x=(shipRoom.position.x + shipRoom.size.w / 2) * TILE_SIZE,
+        y=shipRoom.position.y * TILE_SIZE + 10,
+        r=130, g=100, b=0, range=300, glow=0.5, smooth=1.5 })
 end
 
 function Ship:addItem(shipItem)
