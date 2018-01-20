@@ -18,7 +18,8 @@ end
 
 function Ship:addRoom(shipRoom)
     table.insert(self.rooms, shipRoom)
-    self:addDoors(self.rooms[#self.rooms]) -- or shipRoom ? FIXME
+    self:addDoors(shipRoom)
+    shipRoom:addLight({ x=(shipRoom.position.x + shipRoom.size.w / 2) * TILE_SIZE, y=shipRoom.position.y * TILE_SIZE + 10, r=30, g=100, b=0, range=300, glow=0.5, smooth=1.5 })
 end
 
 function Ship:addItem(shipItem)
@@ -31,55 +32,73 @@ local function commonOffsets(wall1, wall2)
         -- no wall in common
         return nil
     else
-        return { math.max(wall1.x1, wall2.x1) - wall1.x1, math.min(wall1.x2, wall2.x2) - wall1.x1 }
+        return { math.max(1, math.max(wall1.x1, wall2.x1) - wall1.x1), math.max(1, math.min(wall1.x2, wall2.x2) - wall1.x1) }
     end
 end
 
+local function addDoor(room, otherRoom, wallPositions, otherWallPositions, direction, otherDirection, offset)
+    local commonWalls = commonOffsets(wallPositions, otherWallPositions)
+    local added = false
+    if commonWalls and commonWalls[2] - commonWalls[1] >= 2 then
+        local newDoor = commonWalls[1] + math.floor((commonWalls[2] - commonWalls[1]) / 2)
+        table.insert(room.doors[direction], newDoor)
+        table.insert(otherRoom.doors[otherDirection], newDoor + offset)
+        added = true
+    end
+    return added
+end
+
 function Ship:addDoors(room)
+    local hasAdjacent = {up = false, down = false, left = false, right = false}
     for _, otherRoom in ipairs(self.rooms) do
         if room.name ~= otherRoom.name then
             -- adjacent up
             if room.position.y == otherRoom.position.y + otherRoom.size.h then
                 -- FIXME factorize this
-                local commonWalls = commonOffsets({ x1 = room.position.x, x2 = room.position.x + room.size.w },
-                    { x1 = otherRoom.position.x, x2 = otherRoom.position.x + otherRoom.size.w })
-                if commonWalls then
-                    local newDoor = math.random(commonWalls[1], commonWalls[2])
-                    table.insert(room.doors.up, newDoor)
-                    table.insert(otherRoom.doors.down, newDoor + (room.position.x - otherRoom.position.x))
-                end
+                local added = addDoor(room, otherRoom, { x1 = room.position.x, x2 = room.position.x + room.size.w },
+                    { x1 = otherRoom.position.x, x2 = otherRoom.position.x + otherRoom.size.w },
+                    'up', 'down',
+                    (room.position.x - otherRoom.position.x))
+                if added then hasAdjacent.up = true end
             end
             -- adjacent down
             if room.position.y + room.size.h == otherRoom.position.y then
-                local commonWalls = commonOffsets({ x1 = room.position.x, x2 = room.position.x + room.size.w },
-                    { x1 = otherRoom.position.x, x2 = otherRoom.position.x + otherRoom.size.w })
-                if commonWalls then
-                    local newDoor = math.random(commonWalls[1], commonWalls[2])
-                    table.insert(room.doors.down, newDoor)
-                    table.insert(otherRoom.doors.up, newDoor + (room.position.x - otherRoom.position.x))
-                end
+                local added = addDoor(room, otherRoom, { x1 = room.position.x, x2 = room.position.x + room.size.w },
+                    { x1 = otherRoom.position.x, x2 = otherRoom.position.x + otherRoom.size.w },
+                    'down', 'up',
+                    (room.position.x - otherRoom.position.x))
+                if added then hasAdjacent.down = true end
             end
             -- adjacent left
             if room.position.x == otherRoom.position.x + otherRoom.size.w then
-                local commonWalls = commonOffsets({ x1 = room.position.y, x2 = room.position.y + room.size.h },
-                    { x1 = otherRoom.position.y, x2 = otherRoom.position.y + otherRoom.size.h })
-                if commonWalls then
-                    local newDoor = math.random(commonWalls[1], commonWalls[2])
-                    table.insert(room.doors.left, newDoor)
-                    table.insert(otherRoom.doors.right, newDoor + (room.position.y - otherRoom.position.y))
-                end
+                local added = addDoor(room, otherRoom, { x1 = room.position.y, x2 = room.position.y + room.size.h },
+                    { x1 = otherRoom.position.y, x2 = otherRoom.position.y + otherRoom.size.h },
+                    'left', 'right',
+                    (room.position.y - otherRoom.position.y))
+                if added then hasAdjacent.left = true end
             end
             -- adjacent right
             if room.position.x + room.size.w == otherRoom.position.x then
-                local commonWalls = commonOffsets({ x1 = room.position.y, x2 = room.position.y + room.size.h },
-                    { x1 = otherRoom.position.y, x2 = otherRoom.position.y + otherRoom.size.h })
-                if commonWalls then
-                    local newDoor = math.random(commonWalls[1], commonWalls[2])
-                    table.insert(room.doors.right, newDoor)
-                    table.insert(otherRoom.doors.left, newDoor + (room.position.y - otherRoom.position.y))
-                end
+                local added = addDoor(room, otherRoom, { x1 = room.position.y, x2 = room.position.y + room.size.h },
+                    { x1 = otherRoom.position.y, x2 = otherRoom.position.y + otherRoom.size.h },
+                    'right', 'left',
+                    (room.position.y - otherRoom.position.y))
+                if added then hasAdjacent.right = true end
             end
         end
+    end
+    -- update outside info here FIXME naive method : draw outside decoration if no adjacent room
+    if not hasAdjacent.up then
+        room.outside.up = {1, room.size.w}
+    end
+    if not hasAdjacent.down then
+        room.outside.down = {1, room.size.w}
+    end
+    if not hasAdjacent.left then
+        room.outside.left = {1, room.size.h}
+    end
+    if not hasAdjacent.right then
+        room.outside.right = {1, room.size.h}
     end
 end
 

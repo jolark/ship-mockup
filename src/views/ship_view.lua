@@ -90,25 +90,24 @@ local function initWallsBlocks(ship)
         for j, dir in ipairs({ 'up', 'down', 'left', 'right' }) do
             local dirIsUpOrDown = (dir == 'up' or dir == 'down')
             local currentPos = wallPositionUpdate(room, dir, 0)
-            local toomuchwall = 0
+            local lastdoor = 0
             for k, door in ipairs(room.doors[dir]) do
-                print(room.name, dir, door)
-                initBlock({ 
+                initBlock({
                     name = room.name .. i .. dir .. k, 
                     x = currentPos.x, 
                     y = currentPos.y, 
-                    w = dirIsUpOrDown and (door - 1) * TILE_SIZE or 10, 
-                    h = dirIsUpOrDown and 10 or (door - 1) * TILE_SIZE 
+                    w = dirIsUpOrDown and (door - 1 - lastdoor) * TILE_SIZE or 10,
+                    h = dirIsUpOrDown and 10 or (door - 1 - lastdoor) * TILE_SIZE
                     })
                 currentPos = wallPositionUpdate(room, dir, door)
-                toomuchwall = door
+                lastdoor = door
             end
             initBlock({
                 name = room.name .. i .. dir, 
                 x = currentPos.x, 
                 y = currentPos.y,
-                w = dirIsUpOrDown and (room.size.w - toomuchwall) * TILE_SIZE or 10, 
-                h = dirIsUpOrDown and 10 or (room.size.h - toomuchwall) * TILE_SIZE 
+                w = dirIsUpOrDown and (room.size.w - lastdoor) * TILE_SIZE or 10,
+                h = dirIsUpOrDown and 10 or (room.size.h - lastdoor) * TILE_SIZE
                 })
         end
     end
@@ -120,6 +119,14 @@ local function initItemsBlocks(ship)
     end
 end
 
+local function printRoomNames(ship)
+    love.graphics.setColor(0, 0, 0)
+    for i, room in ipairs(ship.rooms) do
+        love.graphics.print(room.name, (room.position.x + room.size.w / 2) * TILE_SIZE, (room.position.y + room.size.h / 2) * TILE_SIZE)
+    end
+    love.graphics.setColor(255, 255, 255)
+end
+
 
 -- Main LÖVE functions
 
@@ -127,13 +134,13 @@ function ship_view:load()
     -- player
     bumpWorld:add(ship_view.player, ship_view.player.x, ship_view.player.y, ship_view.player.w, ship_view.player.h)
     -- lights
-    lightWorld = LightWorld({ ambient = { 55, 55, 55 } })
+    lightWorld = LightWorld({ ambient = { 75, 75, 75 } })
     initLights(ship_view.world.ship)
     playerShadow = lightWorld:newRectangle(ship_view.player.x, ship_view.player.y, 10, 10)
     -- stars
     initStars(stars)
     -- blocks
-    -- initWallsBlocks(ship_view.world.ship)
+    initWallsBlocks(ship_view.world.ship)
     initItemsBlocks(ship_view.world.ship)
     -- camera
     camera = Camera(ship_view.player.x, ship_view.player.y)
@@ -166,7 +173,10 @@ function ship_view:draw()
         drawStars(stars)
         ship_view.world.ship:draw()
         drawAsteroids(asteroids)
-        drawBlocks(world)
+        -- debug
+        printRoomNames(ship_view.world.ship)
+--        drawBlocks(world)
+        -- debug end
         ship_view.player:draw()
     end)
     camera:detach()
