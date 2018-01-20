@@ -5,6 +5,7 @@ function ShipItem:new(posx, posy, isActionnable)
         x = posx or 0,
         y = posy or 0,
         actionnable = isActionnable or false,
+        type = 'none',
         nearPlayer = false,
         -- for now all items have animation even if not actionnalbe FIXME
         switchAnimation = newAnimationFromQuads(love.graphics.newImage('img/switch.png'), {

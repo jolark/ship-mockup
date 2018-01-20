@@ -8,6 +8,7 @@ function Cockpit:new(posx, posy)
     local item = ShipItem:new(posx, posy, true)
     local object = {
         -- animation ? TODO
+        type = 'cockpit',
         block = {name='cockpit'..posx..posy, x=posx, y=posy, w=image:getWidth(), h=image:getHeight()}
     }
     setmetatable(self, {__index = item })
