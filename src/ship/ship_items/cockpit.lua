@@ -2,7 +2,7 @@ require 'src.ship.ship_items.ship_item'
 
 Cockpit = {}
 
-local image = love.graphics.newImage('img/cockpit-control.png')
+local image = love.graphics.newImage('img/cockpit-outside.png')
 
 function Cockpit:new(posx, posy)
     local item = ShipItem:new(posx, posy, true)

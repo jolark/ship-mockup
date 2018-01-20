@@ -23,10 +23,10 @@ function EngineControl:update(dt, player)
 end
 
 function EngineControl:animateReactorLight()
-    for i=1,10 do
+    for i=1,8 do
         love.graphics.setColor(math.random(100,200), math.random(100,200), math.random(100,200))
         local x = -math.random(100,200)
-        love.graphics.rectangle('fill', x, (self.y - 1.6) * TILE_SIZE + i*5, -x + (self.x - 2.7) * TILE_SIZE, 2)
+        love.graphics.rectangle('fill', x, (self.y - 1.6) * TILE_SIZE + i*6, -x + (self.x - 2.7) * TILE_SIZE, 4)
     end
     love.graphics.setColor(255, 255, 255)
 end

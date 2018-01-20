@@ -27,7 +27,7 @@ local world = World:new()
 
 local ship = Ship:new()
 ship:addItem(EngineControl:new(5, 5))
-ship:addItem(Cockpit:new(28, 11))
+ship:addItem(Cockpit:new(30, 10))
 
 local room = ShipRoom:new('room1', 10, 10, 10, 10)
 ship:addRoom(room)
