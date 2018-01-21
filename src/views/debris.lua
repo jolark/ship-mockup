@@ -9,9 +9,7 @@ function Debris:new(xpos, ypos, width, height, speed, scale)
         speed = speed,
         rotation = 0,
         scale = scale or 1,
-        caught = false,
-        reelingVector = {},
-        reelingSpeed = 1
+        caught = false
     }
     setmetatable(object, { __index = Debris })
     return object
@@ -21,9 +19,6 @@ function Debris:update(dt)
     if not self.caught then
         self.position.x = self.position.x - self.speed
         self.rotation = self.rotation + dt * 0.1 * self.speed
-    else
-        self.position.x = self.position.x - self.reelingVector.x * self.reelingSpeed
-        self.position.y = self.position.y - self.reelingVector.y * self.reelingSpeed
     end
 end
 

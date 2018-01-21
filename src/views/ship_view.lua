@@ -144,18 +144,16 @@ local function dist(v1, v2)
 end
 
 function updateFetchingDebris(dt, fetcher)
-    for _, deb in ipairs(debris) do
-        if fetcher.isShooting and
+    for i, deb in ipairs(debris) do
+        if fetcher.isShooting and not deb.caught and
                 dist({ x = deb.position.x + deb.size.w / 2, y = deb.position.y + deb.size.h / 2 },
                     {
                         x = fetcher.x * TILE_SIZE + fetcher.shootVector.x,
                         y = (fetcher.y + 2.5) * TILE_SIZE + fetcher.shootVector.y
                     }) < 100 then
             deb.caught = true
-            deb.reelingVector = fetcher.shootVector
-            deb.reelingSpeed = fetcher.reelingSpeed
-            fetcher.isReeling = true
-            fetcher.isShooting = false
+            fetcher:catchDebris(deb)
+            return
         end
     end
 end
