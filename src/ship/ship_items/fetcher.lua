@@ -2,7 +2,7 @@ require 'src.ship.ship_items.ship_item'
 
 Fetcher = {}
 
-local image = love.graphics.newImage('img/fetcher-decor.png')
+local imageDecor = love.graphics.newImage('img/fetcher-decor.png')
 local imageFetcher = love.graphics.newImage('img/fetcher.png')
 
 function Fetcher:new(posx, posy)
@@ -11,16 +11,27 @@ function Fetcher:new(posx, posy)
         -- animation ? TODO
         type = 'fetcher',
         rotation = 0,
-        block = {name='fetcher'..posx..posy, x=posx, y=posy, w=image:getWidth(), h=image:getHeight()},
+        block = {name='fetcher'..posx..posy, x=posx, y=posy, w=imageDecor:getWidth(), h=imageDecor:getHeight()},
         shootVector = {x=1, y=1},
         isShooting = false,
         shootingSpeed = 1,
         isReeling = false,
-        reelingSpeed = 0.1
+        reelingSpeed = 0.01,
+        light = {
+            x=(posx * TILE_SIZE),
+            y=posy * TILE_SIZE + imageDecor:getHeight() / 2,
+            r=0, g=0, b=0, range=300, glow=1.5, smooth=3 }
     }
     setmetatable(self, {__index = item })
     setmetatable(object, { __index = Fetcher })
     return object
+end
+
+function Fetcher:activateLights(lightworld)
+    local tmplight = lightworld:newLight(self.light.x, self.light.y, self.light.r, self.light.g, self.light.b, self.light.range)
+    tmplight:setGlowStrength(self.light.glow)
+    tmplight:setSmooth(self.light.smooth)
+    self.light = tmplight
 end
 
 function Fetcher:shoot()
@@ -38,7 +49,7 @@ function Fetcher:update(dt, player)
         if self.isShooting then
             self.shootVector.x = self.shootVector.x + self.shootVector.x * self.shootingSpeed
             self.shootVector.y = self.shootVector.y + self.shootVector.y * self.shootingSpeed
-            if veclen(self.shootVector) > 1000 then
+            if veclen(self.shootVector) > 1000 then -- FIXME magic number
                 self.isReeling = true
                 self.isShooting = false
             end
@@ -64,10 +75,15 @@ end
 
 function Fetcher:draw()
     ShipItem.draw(self)
-    love.graphics.draw(image, self.x * TILE_SIZE, self.y * TILE_SIZE)
+    love.graphics.draw(imageDecor, self.x * TILE_SIZE, self.y * TILE_SIZE)
     if self.isShooting or self.isReeling then
         love.graphics.setColor(255,255,255)
-        love.graphics.line(self.x * TILE_SIZE, (self.y + 1) * TILE_SIZE, self.x * TILE_SIZE + self.shootVector.x, (self.y + 1) * TILE_SIZE + self.shootVector.y)
+        love.graphics.line(self.x * TILE_SIZE, (self.y + 2.5) * TILE_SIZE, self.x * TILE_SIZE + self.shootVector.x, (self.y + 2.5) * TILE_SIZE + self.shootVector.y)
+        -- red led
+        self.light:setColor(120,0,0)
+    else
+        -- green led
+        self.light:setColor(0,100,0)
     end
-    love.graphics.draw(imageFetcher, self.x * TILE_SIZE, (self.y + 1) * TILE_SIZE, self.rotation, 1, 1, imageFetcher:getWidth()/2, imageFetcher:getHeight()/2)
+    love.graphics.draw(imageFetcher, self.x * TILE_SIZE, (self.y + 2.5) * TILE_SIZE, self.rotation, 1, 1, imageFetcher:getWidth()/2, imageFetcher:getHeight()/2)
 end

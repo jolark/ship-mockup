@@ -19,6 +19,10 @@ function ShipItem:new(posx, posy, isActionnable)
     return object
 end
 
+function ShipItem:activateLights(lightworld)
+    -- to override
+end
+
 -- FIXME isNear center instead of upleft corner
 function ShipItem:isNear(x, y, dist)
     local dx = self.x - x

@@ -63,6 +63,9 @@ local function initLights(ship)
     for _, room in ipairs(ship.rooms) do
         room:activateLights(lightWorld)
     end
+    for _,item in ipairs(ship.items) do
+        item:activateLights(lightWorld)
+    end
 end
 
 local function initBlock(block)
