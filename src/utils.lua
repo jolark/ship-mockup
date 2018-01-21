@@ -71,3 +71,12 @@ function inTable(tab, val)
 
     return false
 end
+
+function tablePrint(tabl)
+	local s = '{ '
+	for _,e in ipairs(tabl) do
+		s = s .. e .. ' '
+	end
+	s = s .. '}'
+	print(s)
+end
