@@ -29,6 +29,16 @@ function Ship:addItem(shipItem)
     table.insert(self.items, shipItem)
 end
 
+-- FIXME find a better way to access specific items ?
+function Ship:getItem(type)
+    for _,item in ipairs(self.items) do
+        if item.type == type then
+            return item
+        end
+    end
+    return nil
+end
+
 -- return relative common offsets
 local function commonOffsets(wall1, wall2)
     if wall1.x1 >= wall2.x2 or wall2.x1 >= wall1.x2 then
