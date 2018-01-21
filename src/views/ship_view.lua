@@ -163,7 +163,7 @@ function ship_view:update(dt)
     ship_view.world:update(dt, ship_view.player, colliding)
     if ship_view.player.switchedToFetcher then
        -- camera:move(1000, 0)
-       updateCamera({x=ship_view.player - love.graphics.getWidth()/2, y=ship_view.player})
+       updateCamera({x=ship_view.player.x - love.graphics.getWidth()/3, y=ship_view.player.y})
     else
         ship_view.player:update(bumpWorld, dt)
         updateCamera(ship_view.player)
