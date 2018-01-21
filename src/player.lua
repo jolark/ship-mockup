@@ -23,7 +23,8 @@ function Player:new()
 		}),
 		canSwitchToCockpit = false,
 		canSwitchToEngineLeft = false,
-		canSwitchToEngineRight = false
+		canSwitchToEngineRight = false,
+		canSwitchToFetcher = false
 	}
 	setmetatable(player, { __index = Player })
 	return player

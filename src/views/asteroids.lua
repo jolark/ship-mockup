@@ -40,7 +40,7 @@ end
 function updateAsteroids(asteroids, ship)
     -- randomly create a falling asteroid
     local fall = math.random()
-    if fall > 1 - 0.005 * ship.speed then
+    if fall > 1 - 0.001 * ship.speed then
         -- asteroid can come from up, down or right
         local side = love.math.random(3)
         local origin = {}

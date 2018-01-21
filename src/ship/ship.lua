@@ -107,11 +107,11 @@ end
 
 function Ship:randomlyBreakEngines(colliding)
     if colliding then
-        if math.random() > 0.90 then
-            if not self.engineLeftBreak and math.random() > 0.90 then
+        if math.random() > 0.95 then
+            if not self.engineLeftBreak and math.random() > 0.95 then
                 self.engineLeftBreak = true
             end
-            if not self.engineRightBreak and math.random() > 0.90 then
+            if not self.engineRightBreak and math.random() > 0.95 then
                 self.engineRightBreak = true
             end
         end

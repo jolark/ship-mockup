@@ -91,6 +91,7 @@ local function initWallsBlocks(ship)
             local dirIsUpOrDown = (dir == 'up' or dir == 'down')
             local currentPos = wallPositionUpdate(room, dir, 0)
             local lastdoor = 0
+            table.sort(room.doors[dir])
             for k, door in ipairs(room.doors[dir]) do
                 initBlock({
                     name = room.name .. i .. dir .. k, 
@@ -157,11 +158,16 @@ function ship_view:enter(previous, world, player)
 end
 
 function ship_view:update(dt)
-    ship_view.player:update(bumpWorld, dt)
     updateStars(stars, ship_view.world.ship.speed)
     local colliding = updateAsteroids(asteroids, ship_view.world.ship)
     ship_view.world:update(dt, ship_view.player, colliding)
-    updateCamera(ship_view.player)
+    if ship_view.player.switchedToFetcher then
+       -- camera:move(1000, 0)
+       updateCamera({x=ship_view.player - love.graphics.getWidth()/2, y=ship_view.player})
+    else
+        ship_view.player:update(bumpWorld, dt)
+        updateCamera(ship_view.player)
+    end
     lightWorld:update(dt)
     playSounds()
 end

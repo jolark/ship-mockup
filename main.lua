@@ -8,6 +8,7 @@ require 'src.ship.ship'
 require 'src.ship.ship_room'
 require 'src.ship.ship_items.engine_control'
 require 'src.ship.ship_items.cockpit'
+require 'src.ship.ship_items.fetcher'
 
 -- views
 local ship_view = require 'src.views.ship_view'
@@ -28,13 +29,14 @@ local world = World:new()
 local ship = Ship:new()
 ship:addItem(EngineControl:new(5, 5))
 ship:addItem(Cockpit:new(30, 10))
+ship:addItem(Fetcher:new(0, 15))
 
 local room = ShipRoom:new('room1', 10, 10, 10, 10)
 ship:addRoom(room)
 
 ship:addRoom(ShipRoom:new('room2', 14, 20, 15, 5))
 ship:addRoom(ShipRoom:new('room3', 20, 10, 10, 5))
-ship:addRoom(ShipRoom:new('room4', 0, 11, 10, 5))
+ship:addRoom(ShipRoom:new('room4', 0, 10, 10, 10))
 ship:addRoom(ShipRoom:new('room5', 4, 5, 10, 5))
 ship:addRoom(ShipRoom:new('room6', 20, 15, 10, 5))
 ship:addRoom(ShipRoom:new('room7', 14, 5, 5, 5))
@@ -85,6 +87,12 @@ function love.update(dt)
 			state = 'ship'
 		elseif state == 'cockpit' then
 			Gamestate.switch(ship_view, world, player)
+			state = 'ship'
+		elseif state == 'ship' and player.canSwitchToFetcher then
+            player.switchedToFetcher = true
+            state = 'fetcher'
+		elseif state == 'fetcher' then
+			player.switchedToFetcher = false
 			state = 'ship'
 		end
 		keypressed = true
