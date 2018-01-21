@@ -49,19 +49,21 @@ local function drawLed(led)
 	love.graphics.polygon('fill', led.position[1] + led.mirror[1], led.position[2] + led.mirror[2], led.position[1] + led.size[1] + led.mirror[1], led.position[2] - led.size[2] + led.mirror[2], led.position[1] + led.size[1] + led.mirror[1], led.position[2] + led.mirror[2], led.position[1] + led.mirror[1], led.position[2] + led.size[2] + led.mirror[2])
 end
 
-
--- LÖVE functions
-
-function cockpit_view:enter(previous, world, player)
-	cockpit_view.world = world
-	maxSpeed = 8
+function maxSpeedUpdate()
 	if cockpit_view.world.ship.engineLeftBreak or cockpit_view.world.ship.engineRightBreak then
 		maxSpeed = 4
 	end
 	if cockpit_view.world.ship.engineLeftBreak and cockpit_view.world.ship.engineRightBreak then
 		maxSpeed = 1
 	end
-	cockpit_view.world.ship.speed = math.min(world.ship.speed, maxSpeed)	
+	cockpit_view.world.ship.speed = math.min(cockpit_view.world.ship.speed, maxSpeed)
+end
+
+-- LÖVE functions
+
+function cockpit_view:enter(previous, world, player)
+	cockpit_view.world = world
+	maxSpeed = 8
 end
 
 function cockpit_view:init()
@@ -71,6 +73,7 @@ function cockpit_view:init()
 end
 
 function cockpit_view:update(dt)
+	maxSpeedUpdate()
 	space.update(dt, cockpit_view.world.ship.speed)
 	if not keypressed then
 		if love.keyboard.isDown('up') then
@@ -96,6 +99,7 @@ function cockpit_view:update(dt)
 			led.delay = math.random(1,5)
 		end
 	end
+	cockpit_view.world.ship:update(dt, nil, math.random() > 1 - 0.005 * cockpit_view.world.ship.speed)
 end
 
 function cockpit_view:draw()
@@ -108,14 +112,14 @@ function cockpit_view:draw()
 	love.graphics.draw(imageShift, 818, 290 + cockpit_view.world.ship.speed * 10, 0, 2, -math.pi / 2)
 	love.graphics.setColor(255,255,255)
 	-- speed leds
-	for i=1,math.ceil(cockpit_view.world.ship.speed) do
+	for i=1,cockpit_view.world.ship.speed do
 		love.graphics.setColor(0,200,0)
 		love.graphics.rectangle('fill', 802, 538 - i*12, 5, 2)
 		love.graphics.setColor(0,200,0, 30)
 		love.graphics.rectangle('fill', 802, 250 + i*12, 5, 2)
 	end
-	-- FIX THIS
-	for i=0, 8 - maxSpeed, -1 do
+	-- max speed leds if engine is broken
+	for i=maxSpeed + 1, 8 do
 		love.graphics.setColor(200,0,0)
 		love.graphics.rectangle('fill', 802, 538 - i*12, 5, 2)
 		love.graphics.setColor(200,0,0, 30)
@@ -125,7 +129,11 @@ function cockpit_view:draw()
 	for _,led in ipairs(leds) do
 		drawLed(led)
 	end
-
+	-- fuel bar
+	love.graphics.setColor(0,200,0)
+	love.graphics.rectangle('fill', 492, 474, cockpit_view.world.ship.fuelLevel, 6)
+	love.graphics.setColor(0,200,0, 30)
+	love.graphics.rectangle('fill', 492, 308, cockpit_view.world.ship.fuelLevel, 6)
 	-- text
 	love.graphics.setColor(0,200,0)
 	love.graphics.draw(scrollingText, math.max(440, 676 - scrollingTextOffset * 7), 495)

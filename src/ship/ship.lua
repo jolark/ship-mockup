@@ -112,24 +112,33 @@ function Ship:randomlyBreakEngines(colliding)
                 self.engineLeftBreak = true
             end
             if not self.engineRightBreak and math.random() > 0.90 then
-                self.ship.engineRightBreak = true
+                self.engineRightBreak = true
             end
         end
     end
 end
 
 function Ship:fuelUpdate()
-    self.fuelLevel = self.fuelLevel - 0.01 * self.speed
+    self.fuelLevel = math.max(0, self.fuelLevel - 0.001 * self.speed)
 end
 
 function Ship:update(dt, player, colliding)
-    for _, room in ipairs(self.rooms) do
-        room:update(dt, player)
+    if player then
+        for _, room in ipairs(self.rooms) do
+            room:update(dt, player)
+        end
+        for _,item in ipairs(self.items) do
+            item:update(dt, player)
+        end
     end
-    for _,item in ipairs(self.items) do
-        item:update(dt, player)
+    self:randomlyBreakEngines(colliding)
+    if self.engineLeftBreak or self.engineRightBreak then
+        self.speed = math.min(4, self.speed)
+        if self.engineLeftBreak and self.engineRightBreak then
+            self.speed = math.min(1, self.speed)
+        end
     end
-    --    self:randomlyBreakEngines(colliding)
+    self:fuelUpdate()
 end
 
 function Ship:draw()
@@ -137,6 +146,6 @@ function Ship:draw()
         room:draw()
     end
     for _,item in ipairs(self.items) do
-        item:draw()
+        item:draw(self.speed)
     end
 end

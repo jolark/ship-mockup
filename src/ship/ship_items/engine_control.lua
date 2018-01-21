@@ -22,18 +22,18 @@ function EngineControl:update(dt, player)
     player.canSwitchToEngineLeft = self.nearPlayer
 end
 
-function EngineControl:animateReactorLight()
-    for i=1,8 do
+function EngineControl:animateReactorLight(speed)
+    for i=1,speed do
         love.graphics.setColor(math.random(100,200), math.random(100,200), math.random(100,200))
         local x = -math.random(100,200)
-        love.graphics.rectangle('fill', x, (self.y - 1.6) * TILE_SIZE + i*6, -x + (self.x - 2.7) * TILE_SIZE, 4)
+        love.graphics.rectangle('fill', x, (self.y - 1) * TILE_SIZE + (i*3) * (i%2==0 and -1 or 1), -x + (self.x - 2.7) * TILE_SIZE, 4)
     end
     love.graphics.setColor(255, 255, 255)
 end
 
-function EngineControl:draw()
+function EngineControl:draw(speed)
     love.graphics.draw(image, self.x * TILE_SIZE, self.y * TILE_SIZE + 10) -- +10 = wall size
     love.graphics.draw(imageOutside, (self.x - 3) * TILE_SIZE, (self.y - 2.5) * TILE_SIZE)
-    self:animateReactorLight()
+    self:animateReactorLight(speed)
     ShipItem.draw(self)
 end

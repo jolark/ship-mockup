@@ -45,8 +45,9 @@ world.ship = ship
 
 player:setPosition({x=13, y=13})
 
-local bgm = love.audio.newSource("sound/main-menu.ogg", "stream")
-love.audio.play(bgm)
+-- local bgm = love.audio.newSource("sound/main-menu.ogg", "stream")
+-- bgm:setLooping(true)
+-- love.audio.play(bgm)
 
 -- TEST STUFF END
 

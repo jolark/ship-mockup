@@ -32,7 +32,7 @@ end
 
 function engines_view_left:enter(previous, world, player)
 	engines_view_left.world = world
-	if engines_view_left.world.ship.engineLeftBreak then
+	if engines_view_left.world.ship.engineLeftBreak then -- FIXME: don't re-shuffle
 		engine:shuffleTubes()
 	end
 end
