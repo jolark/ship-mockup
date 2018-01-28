@@ -17,6 +17,7 @@ function Fetcher:new(posx, posy)
         shootingSpeed = 1,
         isReeling = false,
         reelingSpeed = 0.01,
+        caughtDebris = nil,
         light = {
             x=(posx * TILE_SIZE),
             y=posy * TILE_SIZE + imageDecor:getHeight() / 2,
@@ -25,6 +26,14 @@ function Fetcher:new(posx, posy)
     setmetatable(self, {__index = item })
     setmetatable(object, { __index = Fetcher })
     return object
+end
+
+function Fetcher:catchDebris(debris)
+    self.caughtDebris = debris
+    self.caughtDebris.position.x = self.x * TILE_SIZE + self.shootVector.x
+    self.caughtDebris.position.y = (self.y + 2.5) * TILE_SIZE + self.shootVector.y
+    self.isShooting = false
+    self.isReeling = true
 end
 
 function Fetcher:activateLights(lightworld)
@@ -71,6 +80,14 @@ function Fetcher:update(dt, player)
             end
         end
     end
+    if self.caughtDebris then
+        self.caughtDebris.position.x = self.caughtDebris.position.x - self.shootVector.x * self.reelingSpeed
+        self.caughtDebris.position.y = self.caughtDebris.position.y - self.shootVector.y * self.reelingSpeed
+        if veclen(self.shootVector) < 10 then
+            self.caughtDebris = nil
+            -- TODO do something with caught debris
+        end
+    end
 end
 
 function Fetcher:draw()
@@ -86,4 +103,7 @@ function Fetcher:draw()
         self.light:setColor(0,100,0)
     end
     love.graphics.draw(imageFetcher, self.x * TILE_SIZE, (self.y + 2.5) * TILE_SIZE, self.rotation, 1, 1, imageFetcher:getWidth()/2, imageFetcher:getHeight()/2)
+    if self.caughtDebris then
+        self.caughtDebris:draw()
+    end
 end
