@@ -83,6 +83,10 @@ function Fetcher:update(dt, player)
     if self.caughtDebris then
         self.caughtDebris.position.x = self.caughtDebris.position.x - self.shootVector.x * self.reelingSpeed
         self.caughtDebris.position.y = self.caughtDebris.position.y - self.shootVector.y * self.reelingSpeed
+        if veclen(self.shootVector) < 10 then
+            self.caughtDebris = nil
+            -- TODO do something with caught debris
+        end
     end
 end
 

@@ -53,9 +53,9 @@ function playSounds()
     engineSound:play()
 end
 
-function updateCamera(player)
+function updateCamera(player, dt)
     local dx, dy = player.x - camera.x, player.y - camera.y
-    camera:move(dx / 2, dy / 2)
+    camera:move((dx / 2) * dt * camera.speed, (dy / 2) * dt * camera.speed)
     lightWorld:setTranslation(-camera.x * VIEW_SCALE + love.graphics.getWidth() / 2, -camera.y * VIEW_SCALE + love.graphics.getHeight() / 2, VIEW_SCALE)
     playerShadow.x, playerShadow.y = player.x, player.y
 end
@@ -193,6 +193,7 @@ function ship_view:load()
     -- camera
     camera = Camera(ship_view.player.x, ship_view.player.y)
     camera:zoom(VIEW_SCALE)
+    camera.speed = 5
 end
 
 function ship_view:enter(previous, world, player)
@@ -205,19 +206,26 @@ function ship_view:enter(previous, world, player)
 end
 
 function ship_view:update(dt)
-    updateDebris(dt)
-    updateStars(stars, ship_view.world.ship.speed)
-    local colliding = updateAsteroids(asteroids, ship_view.world.ship)
-    ship_view.world:update(dt, ship_view.player, colliding)
-    if ship_view.player.switchedToFetcher then
-        updateFetchingDebris(dt, ship_view.world.ship:getItem('fetcher'))
-        updateCamera({ x = ship_view.player.x - love.graphics.getWidth() / 3, y = ship_view.player.y })
-    else
-        ship_view.player:update(bumpWorld, dt)
-        updateCamera(ship_view.player)
+    local accum = dt
+    while accum > 0 do      -- accumulator for physics! no more penetration!
+        local dt = math.min( 1/50, accum )  -- use whatever max dt value works best for you
+        accum = accum - dt
+        -- now, do whatever it is you need to do with dt
+        
+        updateDebris(dt)
+        updateStars(stars, ship_view.world.ship.speed)
+        local colliding = updateAsteroids(asteroids, ship_view.world.ship)
+        ship_view.world:update(dt, ship_view.player, colliding)
+        if ship_view.player.switchedToFetcher then
+            updateFetchingDebris(dt, ship_view.world.ship:getItem('fetcher'))
+            updateCamera({ x = ship_view.player.x - love.graphics.getWidth() / 3, y = ship_view.player.y }, dt)
+        else
+            ship_view.player:update(bumpWorld, dt)
+            updateCamera(ship_view.player, dt)
+        end
+        lightWorld:update(dt)
+        playSounds()
     end
-    lightWorld:update(dt)
-    playSounds()
 end
 
 
@@ -230,7 +238,7 @@ function ship_view:draw()
         drawAsteroids(asteroids)
         -- debug
         printRoomNames(ship_view.world.ship)
-        --        drawBlocks(world)
+        drawBlocks(world)
         -- debug end
         ship_view.player:draw()
     end)
